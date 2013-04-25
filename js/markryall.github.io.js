@@ -1,4 +1,6 @@
 (function() {
+  var __slice = [].slice;
+
   $(function() {
     var commands, key, ls, open, say;
 
@@ -29,6 +31,15 @@
       },
       lastfm: function() {
         return open('http://last.fm/user/mryall');
+      },
+      "eval": function() {
+        var result, strings;
+
+        strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        result = window["eval"](strings.join(' '));
+        if (result) {
+          return say(this, String(result));
+        }
       }
     };
     ls = '';

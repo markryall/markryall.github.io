@@ -14,7 +14,10 @@ $ ->
     linkedin: -> open 'http://linkedin.com/in/markryall',
     flickr: -> open 'http://flickr.com/photos/markryall',
     aboutme: -> open 'http://about.me/markryall',
-    lastfm: -> open 'http://last.fm/user/mryall'
+    lastfm: -> open 'http://last.fm/user/mryall',
+    eval: (strings...) ->
+      result = window.eval strings.join ' '
+      say this, String(result) if result
   }
 
   ls = ''
