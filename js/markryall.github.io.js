@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var commands, help, key, open, say;
+    var commands, key, ls, open, say;
 
     say = function(term, message) {
       term.echo(message);
@@ -31,15 +31,16 @@
         return open('http://last.fm/user/mryall');
       }
     };
-    help = 'available commands are: ';
+    ls = '';
     for (key in commands) {
-      help += "\n\t" + key;
+      ls += "" + key + "\n";
     }
-    commands['help'] = function() {
-      return say(this, help);
+    commands['ls'] = function() {
+      return say(this, ls);
     };
     return $('body').terminal(commands, {
       greetings: 'welcome',
+      tabcompletion: true,
       onBlur: function() {
         return false;
       }

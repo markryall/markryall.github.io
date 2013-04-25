@@ -17,10 +17,11 @@ $ ->
     lastfm: -> open 'http://last.fm/user/mryall'
   }
 
-  help = 'available commands are: '
-  help += "\n\t#{key}" for key of commands
-  commands['help'] = -> say this, help
+  ls = ''
+  ls += "#{key}\n" for key of commands
+  commands['ls'] = -> say this, ls
 
   $('body').terminal commands,
     greetings: 'welcome',
+    tabcompletion: true,
     onBlur: -> false,
