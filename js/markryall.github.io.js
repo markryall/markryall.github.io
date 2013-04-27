@@ -2,7 +2,7 @@
   var __slice = [].slice;
 
   $(function() {
-    var commands, key, ls, open, say;
+    var commands, contact, links, ls, open, push, say;
 
     say = function(term, message) {
       term.echo(message);
@@ -10,7 +10,21 @@
     open = function(url) {
       window.open(url);
     };
-    commands = {
+    push = function(term, commands, options) {
+      term.push(commands, options);
+    };
+    ls = function(commands) {
+      var key, list;
+
+      list = '';
+      for (key in commands) {
+        list += "" + key + "\n";
+      }
+      return commands['ls'] = function() {
+        return say(this, list);
+      };
+    };
+    links = {
       twitter: function() {
         return open('http://twitter.com/markryall');
       },
@@ -40,7 +54,10 @@
       },
       goodreads: function() {
         return open('http://www.goodreads.com/user/show/1908681-mark-ryall');
-      },
+      }
+    };
+    ls(links);
+    contact = {
       skype: function() {
         return open('skype:mark_ryall');
       },
@@ -49,6 +66,19 @@
       },
       mail: function() {
         return open('mailto:mark@ryall.com');
+      }
+    };
+    ls(contact);
+    commands = {
+      links: function() {
+        return push(this, links, {
+          prompt: 'markryall/links > '
+        });
+      },
+      contact: function() {
+        return push(this, contact, {
+          prompt: 'markryall/contact > '
+        });
       },
       "eval": function() {
         var result, strings;
@@ -60,16 +90,10 @@
         }
       }
     };
-    ls = '';
-    for (key in commands) {
-      ls += "" + key + "\n";
-    }
-    commands['ls'] = function() {
-      return say(this, ls);
-    };
+    ls(commands);
     return $('body').terminal(commands, {
       greetings: "\nhi and welcome to this place\n\nhit the tab key for available commands.\n",
-      prompt: ' > ',
+      prompt: 'markryall > ',
       tabcompletion: true,
       onBlur: function() {
         return false;
