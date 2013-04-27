@@ -15,6 +15,9 @@ $ ->
     flickr: -> open 'http://flickr.com/photos/markryall',
     aboutme: -> open 'http://about.me/markryall',
     lastfm: -> open 'http://last.fm/user/mryall',
+    skype: -> open 'skype:mark_ryall',
+    phone: -> open 'skype:+61414740489',
+    mail: -> open 'mailto:mark@ryall.com'
     eval: (strings...) ->
       result = window.eval strings.join ' '
       say this, String(result) if result
@@ -25,6 +28,12 @@ $ ->
   commands['ls'] = -> say this, ls
 
   $('body').terminal commands,
-    greetings: 'welcome',
+    greetings: """
+    hi and welcome to this place
+
+    hit the tab key for available commands.
+
+    """,
+    prompt: ' > ',
     tabcompletion: true,
     onBlur: -> false,

@@ -32,6 +32,15 @@
       lastfm: function() {
         return open('http://last.fm/user/mryall');
       },
+      skype: function() {
+        return open('skype:mark_ryall');
+      },
+      phone: function() {
+        return open('skype:+61414740489');
+      },
+      mail: function() {
+        return open('mailto:mark@ryall.com');
+      },
       "eval": function() {
         var result, strings;
 
@@ -50,7 +59,8 @@
       return say(this, ls);
     };
     return $('body').terminal(commands, {
-      greetings: 'welcome',
+      greetings: "hi and welcome to this place\n\nhit the tab key for available commands.\n",
+      prompt: ' > ',
       tabcompletion: true,
       onBlur: function() {
         return false;
