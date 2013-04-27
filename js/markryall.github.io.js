@@ -20,6 +20,12 @@
       github: function() {
         return open('http://github.com/markryall');
       },
+      bitbucket: function() {
+        return open('https://bitbucket.org/markryall');
+      },
+      coderwall: function() {
+        return open('https://coderwall.com/markryall');
+      },
       linkedin: function() {
         return open('http://linkedin.com/in/markryall');
       },
@@ -31,6 +37,9 @@
       },
       lastfm: function() {
         return open('http://last.fm/user/mryall');
+      },
+      goodreads: function() {
+        return open('http://www.goodreads.com/user/show/1908681-mark-ryall');
       },
       skype: function() {
         return open('skype:mark_ryall');
@@ -59,7 +68,7 @@
       return say(this, ls);
     };
     return $('body').terminal(commands, {
-      greetings: "hi and welcome to this place\n\nhit the tab key for available commands.\n",
+      greetings: "\nhi and welcome to this place\n\nhit the tab key for available commands.\n",
       prompt: ' > ',
       tabcompletion: true,
       onBlur: function() {

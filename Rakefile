@@ -8,3 +8,7 @@ rescue LoadError
 end
 
 task :default => ['jasmine:ci']
+
+task :publish do
+  sh 'scp -r * sh:www/mark.ryall.name'
+end
