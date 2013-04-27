@@ -70,10 +70,11 @@
     };
     ls(contact);
     date = function(string) {
-      var seconds;
+      var seconds, time;
 
       seconds = parseInt(string);
-      return new Date(seconds * 1000);
+      time = moment(seconds * 1000);
+      return time.fromNow();
     };
     music = function(term) {
       $.ajax({

@@ -39,7 +39,8 @@ $ ->
 
   date = (string) ->
     seconds = parseInt string
-    new Date seconds * 1000
+    time = moment seconds * 1000
+    time.fromNow()
 
   music = (term) ->
     $.ajax
