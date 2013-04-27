@@ -52,9 +52,7 @@ $ ->
         'format': 'json'
       },
       success: (data) ->
-        console.log data
         display = (track) ->
-          console.log track
           description = "#{track.name} by #{track.artist['#text']} from #{track.album['#text']}"
           message = if track['@attr'] and track['@attr'].nowplaying
             "Now listening to #{description}"

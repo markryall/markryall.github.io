@@ -88,11 +88,9 @@
         success: function(data) {
           var display, track, _i, _len, _ref, _results;
 
-          console.log(data);
           display = function(track) {
             var description, message;
 
-            console.log(track);
             description = "" + track.name + " by " + track.artist['#text'] + " from " + track.album['#text'];
             message = track['@attr'] && track['@attr'].nowplaying ? "Now listening to " + description : "" + (date(track.date.uts)) + ": " + description;
             return term.echo(message);
