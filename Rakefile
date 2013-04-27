@@ -10,5 +10,5 @@ end
 task :default => ['jasmine:ci']
 
 task :publish do
-  sh 'scp -r * sh:www/mark.ryall.name'
+  sh 'rsync * sh:www/mark.ryall.name'
 end
