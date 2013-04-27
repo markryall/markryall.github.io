@@ -2,7 +2,7 @@
   var __slice = [].slice;
 
   $(function() {
-    var commands, contact, links, ls, open, push, say;
+    var commands, contact, date, links, ls, music, open, push, say;
 
     say = function(term, message) {
       term.echo(message);
@@ -69,6 +69,44 @@
       }
     };
     ls(contact);
+    date = function(string) {
+      var seconds;
+
+      seconds = parseInt(string);
+      return new Date(seconds * 1000);
+    };
+    music = function(term) {
+      $.ajax({
+        url: 'http://ws.audioscrobbler.com/2.0/',
+        data: {
+          'method': 'user.getrecenttracks',
+          'nowplaying': 'true',
+          'user': 'mryall',
+          'api_key': '21f8c75ad38637220b20a03ad61219a4',
+          'format': 'json'
+        },
+        success: function(data) {
+          var display, track, _i, _len, _ref, _results;
+
+          console.log(data);
+          display = function(track) {
+            var description, message;
+
+            console.log(track);
+            description = "" + track.name + " by " + track.artist['#text'] + " from " + track.album['#text'];
+            message = track['@attr'] && track['@attr'].nowplaying ? "Now listening to " + description : "" + (date(track.date.uts)) + ": " + description;
+            return term.echo(message);
+          };
+          _ref = data.recenttracks.track;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            track = _ref[_i];
+            _results.push(display(track));
+          }
+          return _results;
+        }
+      });
+    };
     commands = {
       links: function() {
         return push(this, links, {
@@ -79,6 +117,9 @@
         return push(this, contact, {
           prompt: 'markryall/contact > '
         });
+      },
+      music: function() {
+        return music(this);
       },
       "eval": function() {
         var result, strings;

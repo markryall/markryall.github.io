@@ -16,7 +16,7 @@ $ ->
     list += "#{key}\n" for key of commands
     commands['ls'] = -> say this, list
 
-  links = {
+  links =
     twitter: -> open 'http://twitter.com/markryall',
     facebook: -> open 'http://facebook.com/mark.ryall',
     github: -> open 'http://github.com/markryall',
@@ -27,25 +27,50 @@ $ ->
     aboutme: -> open 'http://about.me/markryall',
     lastfm: -> open 'http://last.fm/user/mryall',
     goodreads: -> open 'http://www.goodreads.com/user/show/1908681-mark-ryall',
-  }
 
   ls links
 
-  contact = {
+  contact =
     skype: -> open 'skype:mark_ryall',
     phone: -> open 'skype:+61414740489',
     mail: -> open 'mailto:mark@ryall.com',
-  }
 
   ls contact
 
-  commands = {
+  date = (string) ->
+    seconds = parseInt string
+    new Date seconds * 1000
+
+  music = (term) ->
+    $.ajax
+      url: 'http://ws.audioscrobbler.com/2.0/',
+      data: {
+        'method': 'user.getrecenttracks',
+        'nowplaying': 'true',
+        'user': 'mryall',
+        'api_key': '21f8c75ad38637220b20a03ad61219a4',
+        'format': 'json'
+      },
+      success: (data) ->
+        console.log data
+        display = (track) ->
+          console.log track
+          description = "#{track.name} by #{track.artist['#text']} from #{track.album['#text']}"
+          message = if track['@attr'] and track['@attr'].nowplaying
+            "Now listening to #{description}"
+          else
+            "#{date track.date.uts}: #{description}"
+          term.echo message
+        display track for track in data.recenttracks.track
+    return
+
+  commands =
     links: -> push this, links, prompt: 'markryall/links > ',
     contact: -> push this, contact, prompt: 'markryall/contact > ',
+    music: -> music this,
     eval: (strings...) ->
       result = window.eval strings.join ' '
       say this, String(result) if result
-  }
 
   ls commands
 
