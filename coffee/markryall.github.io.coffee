@@ -42,7 +42,6 @@ $ ->
       return
     comments: () ->
       term = this
-      content = strings.join ' '
       $.ajax
         url:'http://feedmeplease.herokuapp.com/comments',
         success: (data) ->

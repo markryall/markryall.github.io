@@ -57,10 +57,9 @@
         });
       },
       comments: function() {
-        var content, term;
+        var term;
 
         term = this;
-        content = strings.join(' ');
         $.ajax({
           url: 'http://feedmeplease.herokuapp.com/comments',
           success: function(data) {
