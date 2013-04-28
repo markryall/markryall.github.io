@@ -1,11 +1,14 @@
 (function() {
-  window.schatter = function() {
-    var conversations, join, load_messages, load_people, schatter, schatter_base, schatter_token, schatter_urls;
+  var __slice = [].slice;
+
+  window.schatter = function(site_name, say, push) {
+    var conversation, conversation_commands, conversations, join, load_messages, load_people, new_message, schatter, schatter_base, schatter_token, schatter_urls;
 
     schatter_base = 'https://schatter.herokuapp.com';
     schatter_urls = {};
     schatter_token = '';
     conversations = [];
+    conversation = {};
     schatter = function(url, params) {
       params.url = url;
       params.headers = {
@@ -14,7 +17,9 @@
       if (!params.data) {
         params.data = {};
       }
-      params.data.auth_token = schatter_token;
+      if (schatter_token) {
+        params.data.auth_token = schatter_token;
+      }
       return $.ajax(params);
     };
     schatter(schatter_base, {
@@ -24,18 +29,18 @@
     });
     conversations = function(term) {
       if (schatter_token === '') {
-        term.echo('please enter your token');
+        say(term, 'please enter your token');
         return;
       }
       schatter(schatter_urls.conversations, {
         success: function(data) {
-          var conversation, i, _i, _len, _results;
+          var i, _i, _len, _results;
 
           conversations = data.conversations;
           _results = [];
           for (i = _i = 0, _len = conversations.length; _i < _len; i = ++_i) {
             conversation = conversations[i];
-            _results.push(term.echo("" + (i + 1) + " " + conversation.name));
+            _results.push(say(term, "" + (i + 1) + " " + conversation.name));
           }
           return _results;
         }
@@ -77,8 +82,29 @@
         }
       });
     };
+    new_message = function(content, callback) {
+      return schatter(conversation._links.messages.href, {
+        type: 'post',
+        data: {
+          content: content
+        },
+        success: function(data) {
+          return callback();
+        }
+      });
+    };
+    conversation_commands = {
+      say: function() {
+        var strings;
+
+        strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return new_message(strings.join(' ', function() {
+          return say(this, 'message created');
+        }));
+      }
+    };
     join = function(term, index) {
-      var conversation, i;
+      var i;
 
       if (schatter_token === '') {
         term.echo('please enter your token');
@@ -112,6 +138,9 @@
           _results.push(term.echo("" + (moment(message.timestamp * 1000)) + " " + conversation.person[message.person_id].email + " " + message.content));
         }
         return _results;
+      });
+      push(term, conversation_commands, {
+        prompt: "" + site_name + "/chat/" + conversation.name + " > "
       });
     };
     return {

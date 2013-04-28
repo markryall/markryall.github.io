@@ -1,15 +1,16 @@
-window.schatter = ->
+window.schatter = (site_name, say, push) ->
 
   schatter_base = 'https://schatter.herokuapp.com'
   schatter_urls = {}
   schatter_token = ''
   conversations = []
+  conversation = {}
 
   schatter = (url, params) ->
     params.url = url
     params.headers = 'Accept': 'application/json'
     params.data = {} unless params.data
-    params.data.auth_token = schatter_token
+    params.data.auth_token = schatter_token if schatter_token
     $.ajax params
 
   schatter schatter_base,
@@ -18,13 +19,13 @@ window.schatter = ->
 
   conversations = (term) ->
     if schatter_token == ''
-      term.echo 'please enter your token'
+      say term, 'please enter your token'
       return
     schatter schatter_urls.conversations,
       success: (data) ->
         conversations = data.conversations
         for conversation, i in conversations
-          term.echo "#{i+1} #{conversation.name}"
+          say term, "#{i+1} #{conversation.name}"
     return
 
   load_people = (conversation, callback) ->
@@ -45,6 +46,19 @@ window.schatter = ->
           conversation.message[message.uuid] = message
         callback()
 
+  new_message = (content, callback) ->
+    schatter conversation._links.messages.href,
+      type: 'post',
+      data:
+        content: content,
+      success: (data) ->
+        callback()
+
+  conversation_commands =
+    say: (strings...) ->
+      new_message strings.join ' ', ->
+        say this, 'message created'
+
   join = (term, index) ->
     if schatter_token == ''
       term.echo 'please enter your token'
@@ -61,6 +75,8 @@ window.schatter = ->
     load_messages conversation, ->
         for message in conversation.messages
           term.echo "#{moment message.timestamp * 1000} #{conversation.person[message.person_id].email} #{message.content}"
+    push term, conversation_commands,
+      prompt: "#{site_name}/chat/#{conversation.name} > "
     return
 
   token: (string) ->
@@ -69,3 +85,4 @@ window.schatter = ->
     return
   conversations: -> conversations this
   join: (index) -> join this, index
+

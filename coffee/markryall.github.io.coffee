@@ -103,7 +103,7 @@ $ ->
     links: -> submenu this, links, 'links', 'here are some links to various sites i use',
     contact: -> submenu this, contact, 'contact', 'here are some ways you can contact me',
     feedback: -> submenu this, feedback, 'feedback', 'here you can give me some feedback',
-    chat: -> submenu this, window.schatter(), 'chat', """
+    chat: -> submenu this, window.schatter(site_name, say, push), 'chat', """
       here is where you will eventually be able to chat with me and other liberal like minded people
 
       this does not actually work quite yet but will soon
