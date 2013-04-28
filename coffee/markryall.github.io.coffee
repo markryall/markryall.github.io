@@ -11,11 +11,7 @@ $ ->
     term.push commands, options
     return
 
-  ls = (commands) ->
-    list = ''
-    list += "#{key}\n" for key of commands
-    commands['ls'] = -> say this, list
-
+  site_name = 'markryall'
   name = ''
   email = ''
 
@@ -66,14 +62,10 @@ $ ->
     lastfm: -> open 'http://last.fm/user/mryall',
     goodreads: -> open 'http://www.goodreads.com/user/show/1908681-mark-ryall',
 
-  ls links
-
   contact =
     skype: -> open 'skype:mark_ryall',
     phone: -> open 'skype:+61414740489',
     mail: -> open 'mailto:mark@ryall.com',
-
-  ls contact
 
   date = (string) ->
     seconds = parseInt string
@@ -100,25 +92,27 @@ $ ->
         display track for track in data.recenttracks.track
     return
 
+  submenu = (term, commands, menu_name) ->
+    term.echo '(hit ctrl-d or exit to return to main menu)\n'
+    push term, commands,
+      prompt: "#{site_name}/#{menu_name} > "
+
   commands =
-    links: -> push this, links, prompt: 'markryall/links > ',
-    contact: -> push this, contact, prompt: 'markryall/contact > ',
-    feedback: -> push this, feedback, prompt: 'markryall/feedback > '
+    links: -> submenu this, links, 'links',
+    contact: -> submenu this, contact, 'contact',
+    feedback: -> submenu this, feedback, 'feedback',
     music: -> music this,
     eval: (strings...) ->
       result = window.eval strings.join ' '
       say this, String(result) if result
 
-  ls commands
-
   $('body').terminal commands,
     greetings: """
-
     hi and welcome to this place
 
     hit the tab key for available commands.
 
     """,
-    prompt: 'markryall > ',
+    prompt: "#{site_name} > ",
     tabcompletion: true,
     onBlur: -> false,

@@ -2,7 +2,7 @@
   var __slice = [].slice;
 
   $(function() {
-    var commands, contact, date, email, feedback, links, ls, music, name, open, push, say;
+    var commands, contact, date, email, feedback, links, music, name, open, push, say, site_name, submenu;
 
     say = function(term, message) {
       term.echo(message);
@@ -13,17 +13,7 @@
     push = function(term, commands, options) {
       term.push(commands, options);
     };
-    ls = function(commands) {
-      var key, list;
-
-      list = '';
-      for (key in commands) {
-        list += "" + key + "\n";
-      }
-      return commands['ls'] = function() {
-        return say(this, list);
-      };
-    };
+    site_name = 'markryall';
     name = '';
     email = '';
     feedback = {
@@ -117,7 +107,6 @@
         return open('http://www.goodreads.com/user/show/1908681-mark-ryall');
       }
     };
-    ls(links);
     contact = {
       skype: function() {
         return open('skype:mark_ryall');
@@ -129,7 +118,6 @@
         return open('mailto:mark@ryall.com');
       }
     };
-    ls(contact);
     date = function(string) {
       var seconds, time;
 
@@ -167,21 +155,21 @@
         }
       });
     };
+    submenu = function(term, commands, menu_name) {
+      term.echo('(hit ctrl-d or exit to return to main menu)\n');
+      return push(term, commands, {
+        prompt: "" + site_name + "/" + menu_name + " > "
+      });
+    };
     commands = {
       links: function() {
-        return push(this, links, {
-          prompt: 'markryall/links > '
-        });
+        return submenu(this, links, 'links');
       },
       contact: function() {
-        return push(this, contact, {
-          prompt: 'markryall/contact > '
-        });
+        return submenu(this, contact, 'contact');
       },
       feedback: function() {
-        return push(this, feedback, {
-          prompt: 'markryall/feedback > '
-        });
+        return submenu(this, feedback, 'feedback');
       },
       music: function() {
         return music(this);
@@ -196,10 +184,9 @@
         }
       }
     };
-    ls(commands);
     return $('body').terminal(commands, {
-      greetings: "\nhi and welcome to this place\n\nhit the tab key for available commands.\n",
-      prompt: 'markryall > ',
+      greetings: "hi and welcome to this place\n\nhit the tab key for available commands.\n",
+      prompt: "" + site_name + " > ",
       tabcompletion: true,
       onBlur: function() {
         return false;
