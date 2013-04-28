@@ -2,7 +2,7 @@
   var __slice = [].slice;
 
   window.schatter = function(site_name, say, push) {
-    var conversation, conversation_commands, conversations, join, load_messages, load_people, new_message, schatter, schatter_base, schatter_token, schatter_urls;
+    var conversation, conversation_commands, conversations, join, load_messages, load_people, new_message, new_person, schatter, schatter_base, schatter_token, schatter_urls;
 
     schatter_base = 'https://schatter.herokuapp.com';
     schatter_urls = {};
@@ -93,14 +93,30 @@
         }
       });
     };
+    new_person = function(email, callback) {
+      return schatter(conversation._links.people.href, {
+        type: 'post',
+        data: {
+          email: email
+        },
+        success: function(data) {
+          return callback();
+        }
+      });
+    };
     conversation_commands = {
       say: function() {
-        var strings;
+        var words;
 
-        strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        new_message(strings.join(' ', function() {
+        words = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        new_message(words.join(' ', function() {
           return say(this, 'message created');
         }));
+      },
+      invite: function(email) {
+        new_person(email, function() {
+          return say(this, "" + email + " invited to conversation");
+        });
       }
     };
     join = function(term, index) {

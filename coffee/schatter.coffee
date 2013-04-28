@@ -54,10 +54,22 @@ window.schatter = (site_name, say, push) ->
       success: (data) ->
         callback()
 
+  new_person = (email, callback) ->
+    schatter conversation._links.people.href,
+      type: 'post',
+      data:
+        email: email,
+      success: (data) ->
+        callback()
+
   conversation_commands =
-    say: (strings...) ->
-      new_message strings.join ' ', ->
+    say: (words...) ->
+      new_message words.join ' ', ->
         say this, 'message created'
+      return
+    invite: (email) ->
+      new_person email, ->
+        say this, "#{email} invited to conversation"
       return
 
   join = (term, index) ->
