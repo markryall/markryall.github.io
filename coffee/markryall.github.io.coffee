@@ -110,14 +110,12 @@ $ ->
 
   $('body').terminal commands,
     greetings: """
-    hello, i am mark ryall, a software developer working for thoughtworks
-
-    hit the tab key to see available commands
+    hello, i am mark ryall
 
     this site will not work without a keyboard so please don't
-    frustrate yourself. if you are using a phone or tablet click here:
+    frustrate yourself if you are using a phone or tablet
 
-    #{window.location + 'mobile.html'}
+    hit the tab key to see the available commands
 
     """,
     prompt: "#{site_name} > ",

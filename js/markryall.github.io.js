@@ -189,7 +189,7 @@
       }
     };
     return $('body').terminal(commands, {
-      greetings: "hello, i am mark ryall, a software developer working for thoughtworks\n\nhit the tab key to see available commands\n\nthis site will not work without a keyboard so please don't\nfrustrate yourself. if you are using a phone or tablet click here:\n\n" + (window.location + 'mobile.html') + "\n",
+      greetings: "hello, i am mark ryall\n\nthis site will not work without a keyboard so please don't\nfrustrate yourself if you are using a phone or tablet\n\nhit the tab key to see the available commands\n",
       prompt: "" + site_name + " > ",
       tabcompletion: true,
       onBlur: function() {
