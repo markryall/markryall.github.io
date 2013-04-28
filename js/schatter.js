@@ -65,7 +65,14 @@
       });
     };
     load_messages = function(conversation, callback) {
+      var data;
+
+      data = {};
+      if (conversation.last_message) {
+        data.message_id = conversation.last_message.uuid;
+      }
       return schatter(conversation._links.messages.href, {
+        data: data,
         success: function(data) {
           var message, _i, _len, _ref;
 
@@ -77,6 +84,7 @@
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             message = _ref[_i];
             conversation.message[message.uuid] = message;
+            conversation.last_message = message;
           }
           return callback();
         }
@@ -106,16 +114,36 @@
     };
     conversation_commands = {
       say: function() {
-        var words;
+        var term, words;
 
         words = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        new_message(words.join(' ', function() {
-          return say(this, 'message created');
-        }));
+        term = this;
+        new_message(words.join(' '), function() {
+          return say(term, 'message created');
+        });
       },
       invite: function(email) {
+        var term;
+
+        term = this;
         new_person(email, function() {
-          return say(this, "" + email + " invited to conversation");
+          return say(term, "" + email + " invited to conversation");
+        });
+      },
+      refresh: function() {
+        var term;
+
+        term = this;
+        load_messages(conversation, function() {
+          var message, _i, _len, _ref, _results;
+
+          _ref = conversation.messages;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            message = _ref[_i];
+            _results.push(say(term, "" + (moment(message.timestamp * 1000)) + " " + conversation.person[message.person_id].email + " " + message.content));
+          }
+          return _results;
         });
       }
     };

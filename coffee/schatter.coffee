@@ -38,12 +38,16 @@ window.schatter = (site_name, say, push) ->
         callback()
 
   load_messages = (conversation, callback) ->
+    data = {}
+    data.message_id = conversation.last_message.uuid if conversation.last_message
     schatter conversation._links.messages.href,
+      data: data,
       success: (data) ->
         conversation.messages = data.messages
         conversation.message = {} unless conversation.message
         for message in conversation.messages
           conversation.message[message.uuid] = message
+          conversation.last_message = message
         callback()
 
   new_message = (content, callback) ->
@@ -64,12 +68,20 @@ window.schatter = (site_name, say, push) ->
 
   conversation_commands =
     say: (words...) ->
-      new_message words.join ' ', ->
-        say this, 'message created'
+      term = this
+      new_message words.join(' '), ->
+        say term, 'message created'
       return
     invite: (email) ->
+      term = this
       new_person email, ->
-        say this, "#{email} invited to conversation"
+        say term, "#{email} invited to conversation"
+      return
+    refresh: ->
+      term = this
+      load_messages conversation, ->
+        for message in conversation.messages
+          say term, "#{moment message.timestamp * 1000} #{conversation.person[message.person_id].email} #{message.content}"
       return
 
   join = (term, index) ->
