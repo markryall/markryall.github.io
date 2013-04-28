@@ -1,6 +1,6 @@
 (function() {
   window.schatter = function() {
-    var conversations, join, schatter, schatter_base, schatter_token, schatter_urls;
+    var conversations, join, load_messages, load_people, schatter, schatter_base, schatter_token, schatter_urls;
 
     schatter_base = 'https://schatter.herokuapp.com';
     schatter_urls = {};
@@ -41,6 +41,42 @@
         }
       });
     };
+    load_people = function(conversation, callback) {
+      return schatter(conversation._links.people.href, {
+        success: function(data) {
+          var person, _i, _len, _ref;
+
+          conversation.people = data.people;
+          if (!conversation.person) {
+            conversation.person = {};
+          }
+          _ref = conversation.people;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            person = _ref[_i];
+            conversation.person[person.uuid] = person;
+          }
+          return callback();
+        }
+      });
+    };
+    load_messages = function(conversation, callback) {
+      return schatter(conversation._links.messages.href, {
+        success: function(data) {
+          var message, _i, _len, _ref;
+
+          conversation.messages = data.messages;
+          if (!conversation.message) {
+            conversation.message = {};
+          }
+          _ref = conversation.messages;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            message = _ref[_i];
+            conversation.message[message.uuid] = message;
+          }
+          return callback();
+        }
+      });
+    };
     join = function(term, index) {
       var conversation, i;
 
@@ -54,36 +90,28 @@
         term.echo("no conversation at index " + index);
         return;
       }
-      schatter(conversation._links.people.href, {
-        success: function(data) {
-          var person, _i, _len, _ref, _results;
+      load_people(conversation, function() {
+        var person, _i, _len, _ref, _results;
 
-          conversation.people = data.people;
-          conversation.person = {};
-          term.echo("people in this conversation:");
-          _ref = conversation.people;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            person = _ref[_i];
-            conversation.person[person.uuid] = person;
-            _results.push(term.echo("  " + person.email));
-          }
-          return _results;
+        term.echo("people in this conversation:");
+        _ref = conversation.people;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          person = _ref[_i];
+          _results.push(term.echo("  " + person.email));
         }
+        return _results;
       });
-      schatter(conversation._links.messages.href, {
-        success: function(data) {
-          var message, _i, _len, _ref, _results;
+      load_messages(conversation, function() {
+        var message, _i, _len, _ref, _results;
 
-          conversation.messages = data.messages;
-          _ref = conversation.messages;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            message = _ref[_i];
-            _results.push(term.echo("" + (moment(message.timestamp * 1000)) + " " + conversation.person[message.person_id].email + " " + message.content));
-          }
-          return _results;
+        _ref = conversation.messages;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          message = _ref[_i];
+          _results.push(term.echo("" + (moment(message.timestamp * 1000)) + " " + conversation.person[message.person_id].email + " " + message.content));
         }
+        return _results;
       });
     };
     return {

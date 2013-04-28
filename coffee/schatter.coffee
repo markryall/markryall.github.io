@@ -27,6 +27,24 @@ window.schatter = ->
           term.echo "#{i+1} #{conversation.name}"
     return
 
+  load_people = (conversation, callback) ->
+    schatter conversation._links.people.href,
+      success: (data) ->
+        conversation.people = data.people
+        conversation.person = {} unless conversation.person
+        for person in conversation.people
+          conversation.person[person.uuid] = person
+        callback()
+
+  load_messages = (conversation, callback) ->
+    schatter conversation._links.messages.href,
+      success: (data) ->
+        conversation.messages = data.messages
+        conversation.message = {} unless conversation.message
+        for message in conversation.messages
+          conversation.message[message.uuid] = message
+        callback()
+
   join = (term, index) ->
     if schatter_token == ''
       term.echo 'please enter your token'
@@ -36,17 +54,11 @@ window.schatter = ->
     unless conversation
       term.echo "no conversation at index #{index}"
       return
-    schatter conversation._links.people.href,
-      success: (data) ->
-        conversation.people = data.people
-        conversation.person = {}
-        term.echo "people in this conversation:"
-        for person in conversation.people
-          conversation.person[person.uuid] = person
-          term.echo "  #{person.email}"
-    schatter conversation._links.messages.href,
-      success: (data) ->
-        conversation.messages = data.messages
+    load_people conversation, ->
+      term.echo "people in this conversation:"
+      for person in conversation.people
+        term.echo "  #{person.email}"
+    load_messages conversation, ->
         for message in conversation.messages
           term.echo "#{moment message.timestamp * 1000} #{conversation.person[message.person_id].email} #{message.content}"
     return
