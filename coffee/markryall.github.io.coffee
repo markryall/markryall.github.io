@@ -83,13 +83,12 @@ $ ->
   music = (term) ->
     $.ajax
       url: 'http://ws.audioscrobbler.com/2.0/',
-      data: {
+      data:
         'method': 'user.getrecenttracks',
         'nowplaying': 'true',
         'user': 'mryall',
         'api_key': '21f8c75ad38637220b20a03ad61219a4',
-        'format': 'json'
-      },
+        'format': 'json',
       success: (data) ->
         display = (track) ->
           description = "#{track.name} by #{track.artist['#text']} from #{track.album['#text']}"
@@ -104,8 +103,8 @@ $ ->
   commands =
     links: -> push this, links, prompt: 'markryall/links > ',
     contact: -> push this, contact, prompt: 'markryall/contact > ',
+    feedback: -> push this, feedback, prompt: 'markryall/feedback > '
     music: -> music this,
-    feedback: -> push this, feedback,
     eval: (strings...) ->
       result = window.eval strings.join ' '
       say this, String(result) if result

@@ -178,11 +178,13 @@
           prompt: 'markryall/contact > '
         });
       },
+      feedback: function() {
+        return push(this, feedback, {
+          prompt: 'markryall/feedback > '
+        });
+      },
       music: function() {
         return music(this);
-      },
-      feedback: function() {
-        return push(this, feedback);
       },
       "eval": function() {
         var result, strings;
