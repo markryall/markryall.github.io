@@ -155,21 +155,25 @@
         }
       });
     };
-    submenu = function(term, commands, menu_name) {
+    submenu = function(term, commands, menu_name, description) {
+      term.echo(description);
       term.echo('(hit ctrl-d or exit to return to main menu)\n');
       return push(term, commands, {
         prompt: "" + site_name + "/" + menu_name + " > "
       });
     };
     commands = {
+      reload: function() {
+        return window.location.reload(true);
+      },
       links: function() {
-        return submenu(this, links, 'links');
+        return submenu(this, links, 'links', 'here are some links to various sites i use');
       },
       contact: function() {
-        return submenu(this, contact, 'contact');
+        return submenu(this, contact, 'contact', 'here are some ways you can contact me');
       },
       feedback: function() {
-        return submenu(this, feedback, 'feedback');
+        return submenu(this, feedback, 'feedback', 'here you can give me some feedback');
       },
       music: function() {
         return music(this);
@@ -185,7 +189,7 @@
       }
     };
     return $('body').terminal(commands, {
-      greetings: "hi and welcome to this place\n\nhit the tab key for available commands.\n",
+      greetings: "hello, i am mark ryall, a software developer working for thoughtworks\n\nhit the tab key to see available commands\n\nthis site will not work without a keyboard so please don't\nfrustrate yourself. if you are using a phone or tablet click here:\n\n" + (window.location + 'mobile.html') + "\n",
       prompt: "" + site_name + " > ",
       tabcompletion: true,
       onBlur: function() {

@@ -92,15 +92,17 @@ $ ->
         display track for track in data.recenttracks.track
     return
 
-  submenu = (term, commands, menu_name) ->
+  submenu = (term, commands, menu_name, description) ->
+    term.echo description
     term.echo '(hit ctrl-d or exit to return to main menu)\n'
     push term, commands,
       prompt: "#{site_name}/#{menu_name} > "
 
   commands =
-    links: -> submenu this, links, 'links',
-    contact: -> submenu this, contact, 'contact',
-    feedback: -> submenu this, feedback, 'feedback',
+    reload: -> window.location.reload true,
+    links: -> submenu this, links, 'links', 'here are some links to various sites i use',
+    contact: -> submenu this, contact, 'contact', 'here are some ways you can contact me',
+    feedback: -> submenu this, feedback, 'feedback', 'here you can give me some feedback',
     music: -> music this,
     eval: (strings...) ->
       result = window.eval strings.join ' '
@@ -108,9 +110,14 @@ $ ->
 
   $('body').terminal commands,
     greetings: """
-    hi and welcome to this place
+    hello, i am mark ryall, a software developer working for thoughtworks
 
-    hit the tab key for available commands.
+    hit the tab key to see available commands
+
+    this site will not work without a keyboard so please don't
+    frustrate yourself. if you are using a phone or tablet click here:
+
+    #{window.location + 'mobile.html'}
 
     """,
     prompt: "#{site_name} > ",
