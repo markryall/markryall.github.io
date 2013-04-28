@@ -76,13 +76,18 @@
         success: function(data) {
           var message, _i, _len, _ref;
 
-          conversation.messages = data.messages;
+          console.log(data);
+          conversation.new_messages = data.messages;
+          if (!conversation.messages) {
+            conversation.messages = [];
+          }
           if (!conversation.message) {
             conversation.message = {};
           }
-          _ref = conversation.messages;
+          _ref = data.messages;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             message = _ref[_i];
+            conversation.messages.push(message);
             conversation.message[message.uuid] = message;
             conversation.last_message = message;
           }
@@ -137,7 +142,7 @@
         load_messages(conversation, function() {
           var message, _i, _len, _ref, _results;
 
-          _ref = conversation.messages;
+          _ref = conversation.new_messages;
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             message = _ref[_i];

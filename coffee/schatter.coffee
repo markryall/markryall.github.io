@@ -43,9 +43,12 @@ window.schatter = (site_name, say, push) ->
     schatter conversation._links.messages.href,
       data: data,
       success: (data) ->
-        conversation.messages = data.messages
+        console.log data
+        conversation.new_messages = data.messages
+        conversation.messages = [] unless conversation.messages
         conversation.message = {} unless conversation.message
-        for message in conversation.messages
+        for message in data.messages
+          conversation.messages.push message
           conversation.message[message.uuid] = message
           conversation.last_message = message
         callback()
@@ -80,7 +83,7 @@ window.schatter = (site_name, say, push) ->
     refresh: ->
       term = this
       load_messages conversation, ->
-        for message in conversation.messages
+        for message in conversation.new_messages
           say term, "#{moment message.timestamp * 1000} #{conversation.person[message.person_id].email} #{message.content}"
       return
 
