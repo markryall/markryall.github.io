@@ -175,6 +175,9 @@
       feedback: function() {
         return submenu(this, feedback, 'feedback', 'here you can give me some feedback');
       },
+      chat: function() {
+        return submenu(this, window.schatter(), 'chat', "here is where you will eventually be able to chat with me and other liberal like minded people\n\nthis does not actually work quite yet but will soon\n\nfirst, you will need to log in to http://schatter.herokuapp.com to get your auth token.");
+      },
       music: function() {
         return music(this);
       },
