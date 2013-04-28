@@ -55,6 +55,31 @@
             return say(term, 'thanks for the feedback');
           }
         });
+      },
+      comments: function() {
+        var content, term;
+
+        term = this;
+        content = strings.join(' ');
+        $.ajax({
+          url: 'http://feedmeplease.herokuapp.com/comments',
+          success: function(data) {
+            var comment, display, _i, _len, _results;
+
+            display = function(comment) {
+              var time;
+
+              time = moment(comment.created_at);
+              return term.echo("" + (time.fromNow()) + ": " + comment.name + " said " + comment.body);
+            };
+            _results = [];
+            for (_i = 0, _len = data.length; _i < _len; _i++) {
+              comment = data[_i];
+              _results.push(display(comment));
+            }
+            return _results;
+          }
+        });
       }
     };
     links = {

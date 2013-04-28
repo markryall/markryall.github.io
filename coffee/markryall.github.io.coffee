@@ -40,6 +40,17 @@ $ ->
         success: (data) ->
           say term, 'thanks for the feedback'
       return
+    comments: () ->
+      term = this
+      content = strings.join ' '
+      $.ajax
+        url:'http://feedmeplease.herokuapp.com/comments',
+        success: (data) ->
+          display = (comment) ->
+            time = moment comment.created_at
+            term.echo "#{time.fromNow()}: #{comment.name} said #{comment.body}"
+          display comment for comment in data
+      return
 
   links =
     twitter: -> open 'http://twitter.com/markryall',
