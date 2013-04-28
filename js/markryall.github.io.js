@@ -2,7 +2,7 @@
   var __slice = [].slice;
 
   $(function() {
-    var commands, contact, date, links, ls, music, open, push, say;
+    var commands, contact, date, email, feedback, links, ls, music, name, open, push, say;
 
     say = function(term, message) {
       term.echo(message);
@@ -23,6 +23,39 @@
       return commands['ls'] = function() {
         return say(this, list);
       };
+    };
+    name = '';
+    email = '';
+    feedback = {
+      name: function(string) {
+        name = string;
+        return say(this, "name set to " + string);
+      },
+      email: function(string) {
+        email = string;
+        return say(this, "email set to " + string);
+      },
+      comment: function() {
+        var content, strings, term;
+
+        strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        term = this;
+        content = strings.join(' ');
+        $.ajax({
+          url: 'http://feedmeplease.herokuapp.com/comments/create',
+          data: {
+            'comment': {
+              'name': name,
+              'email': email,
+              'body': content
+            }
+          },
+          type: 'post',
+          success: function(data) {
+            return say(term, 'thanks for the feedback');
+          }
+        });
+      }
     };
     links = {
       twitter: function() {
@@ -119,6 +152,9 @@
       },
       music: function() {
         return music(this);
+      },
+      feedback: function() {
+        return push(this, feedback);
       },
       "eval": function() {
         var result, strings;

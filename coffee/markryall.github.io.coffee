@@ -16,6 +16,31 @@ $ ->
     list += "#{key}\n" for key of commands
     commands['ls'] = -> say this, list
 
+  name = ''
+  email = ''
+
+  feedback =
+    name: (string) ->
+      name = string
+      say this, "name set to #{string}"
+    email: (string) ->
+      email = string
+      say this, "email set to #{string}"
+    comment: (strings...) ->
+      term = this
+      content = strings.join ' '
+      $.ajax
+        url:'http://feedmeplease.herokuapp.com/comments/create',
+        data:
+          'comment':
+            'name': name,
+            'email': email,
+            'body': content,
+        type: 'post',
+        success: (data) ->
+          say term, 'thanks for the feedback'
+      return
+
   links =
     twitter: -> open 'http://twitter.com/markryall',
     facebook: -> open 'http://facebook.com/mark.ryall',
@@ -67,6 +92,7 @@ $ ->
     links: -> push this, links, prompt: 'markryall/links > ',
     contact: -> push this, contact, prompt: 'markryall/contact > ',
     music: -> music this,
+    feedback: -> push this, feedback,
     eval: (strings...) ->
       result = window.eval strings.join ' '
       say this, String(result) if result
