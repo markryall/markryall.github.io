@@ -1,25 +1,33 @@
 window.schatter = ->
 
+  schatter_base = 'https://schatter.herokuapp.com'
   schatter_urls = {}
-  auth_token = ''
+  schatter_token = ''
   conversations = []
+
+  $.ajax
+    url: schatter_base,
+    headers:
+      'Accept': 'application/json',
+    success: (data) ->
+      schatter_urls.conversations = data._links.conversations.href
 
   conversations = (term) ->
     if schatter_token == ''
-      say term, 'please enter your auth token'
+      term.echo 'please enter your token'
       return
-    term = this
     $.ajax
-      url:'http://schatter.herokuapp.com/comments',
+      url: schatter_urls.conversations,
+      data:
+        auth_token: schatter_token,
       success: (data) ->
-        display = (comment) ->
-          time = moment comment.created_at
-          term.echo "#{time.fromNow()}: #{comment.name} said #{comment.body}"
-        display comment for comment in data
+        conversations = data.conversations
+        for conversation, i in conversations
+          term.echo "#{i+1} #{conversation.name}"
     return
 
-  auth_token: (string) ->
-    auth_token = string
-    this.echo "auth_token set to #{string}"
+  token: (string) ->
+    schatter_token = string if string
+    this.echo "token set to #{schatter_token}"
     return
   conversations: -> conversations this

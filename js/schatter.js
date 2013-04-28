@@ -1,40 +1,49 @@
 (function() {
   window.schatter = function() {
-    var auth_token, conversations, schatter_urls;
+    var conversations, schatter_base, schatter_token, schatter_urls;
 
+    schatter_base = 'https://schatter.herokuapp.com';
     schatter_urls = {};
-    auth_token = '';
+    schatter_token = '';
     conversations = [];
+    $.ajax({
+      url: schatter_base,
+      headers: {
+        'Accept': 'application/json'
+      },
+      success: function(data) {
+        return schatter_urls.conversations = data._links.conversations.href;
+      }
+    });
     conversations = function(term) {
       if (schatter_token === '') {
-        say(term, 'please enter your auth token');
+        term.echo('please enter your token');
         return;
       }
-      term = this;
       $.ajax({
-        url: 'http://schatter.herokuapp.com/comments',
+        url: schatter_urls.conversations,
+        data: {
+          auth_token: schatter_token
+        },
         success: function(data) {
-          var comment, display, _i, _len, _results;
+          var conversation, i, _i, _len, _results;
 
-          display = function(comment) {
-            var time;
-
-            time = moment(comment.created_at);
-            return term.echo("" + (time.fromNow()) + ": " + comment.name + " said " + comment.body);
-          };
+          conversations = data.conversations;
           _results = [];
-          for (_i = 0, _len = data.length; _i < _len; _i++) {
-            comment = data[_i];
-            _results.push(display(comment));
+          for (i = _i = 0, _len = conversations.length; _i < _len; i = ++_i) {
+            conversation = conversations[i];
+            _results.push(term.echo("" + (i + 1) + " " + conversation.name));
           }
           return _results;
         }
       });
     };
     return {
-      auth_token: function(string) {
-        auth_token = string;
-        this.echo("auth_token set to " + string);
+      token: function(string) {
+        if (string) {
+          schatter_token = string;
+        }
+        this.echo("token set to " + schatter_token);
       },
       conversations: function() {
         return conversations(this);
