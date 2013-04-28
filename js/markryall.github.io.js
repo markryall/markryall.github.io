@@ -39,6 +39,10 @@
         var content, strings, term;
 
         strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        if (name === '' || email === '') {
+          this.echo('please enter your name and email before submitting a comment');
+          return;
+        }
         term = this;
         content = strings.join(' ');
         $.ajax({

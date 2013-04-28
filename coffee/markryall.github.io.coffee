@@ -27,6 +27,9 @@ $ ->
       email = string
       say this, "email set to #{string}"
     comment: (strings...) ->
+      if name == '' or email == ''
+        this.echo 'please enter your name and email before submitting a comment'
+        return
       term = this
       content = strings.join ' '
       $.ajax
