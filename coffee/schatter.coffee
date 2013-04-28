@@ -58,6 +58,7 @@ window.schatter = (site_name, say, push) ->
     say: (strings...) ->
       new_message strings.join ' ', ->
         say this, 'message created'
+      return
 
   join = (term, index) ->
     if schatter_token == ''

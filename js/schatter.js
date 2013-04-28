@@ -98,7 +98,7 @@
         var strings;
 
         strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return new_message(strings.join(' ', function() {
+        new_message(strings.join(' ', function() {
           return say(this, 'message created');
         }));
       }
