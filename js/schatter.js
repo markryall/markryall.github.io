@@ -2,7 +2,7 @@
   var __slice = [].slice;
 
   window.schatter = function(site_name, say, push) {
-    var conversation, conversation_commands, conversations, join, load_messages, load_people, new_message, new_person, schatter, schatter_base, schatter_token, schatter_urls;
+    var absolute_time, conversation, conversation_commands, conversations, display_message, join, load_messages, load_people, new_message, new_person, schatter, schatter_base, schatter_token, schatter_urls;
 
     schatter_base = 'https://schatter.herokuapp.com';
     schatter_urls = {};
@@ -76,7 +76,6 @@
         success: function(data) {
           var message, _i, _len, _ref;
 
-          console.log(data);
           conversation.new_messages = data.messages;
           if (!conversation.messages) {
             conversation.messages = [];
@@ -117,6 +116,15 @@
         }
       });
     };
+    absolute_time = function(ts) {
+      var t;
+
+      t = moment(ts * 1000);
+      return t.format('YY/MMM/DD HH:mm:ss');
+    };
+    display_message = function(term, message) {
+      return say(term, "" + (absolute_time(message.timestamp)) + " " + conversation.person[message.person_id].email + " " + message.content);
+    };
     conversation_commands = {
       say: function() {
         var term, words;
@@ -146,7 +154,7 @@
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             message = _ref[_i];
-            _results.push(say(term, "" + (moment(message.timestamp * 1000)) + " " + conversation.person[message.person_id].email + " " + message.content));
+            _results.push(display_message(term, message));
           }
           return _results;
         });
@@ -180,11 +188,14 @@
       load_messages(conversation, function() {
         var message, _i, _len, _ref, _results;
 
-        _ref = conversation.messages;
+        if (conversation.messages.length > 10) {
+          term.echo('...');
+        }
+        _ref = conversation.messages.slice(-10);
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           message = _ref[_i];
-          _results.push(term.echo("" + (moment(message.timestamp * 1000)) + " " + conversation.person[message.person_id].email + " " + message.content));
+          _results.push(display_message(term, message));
         }
         return _results;
       });

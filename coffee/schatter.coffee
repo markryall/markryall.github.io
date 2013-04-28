@@ -43,7 +43,6 @@ window.schatter = (site_name, say, push) ->
     schatter conversation._links.messages.href,
       data: data,
       success: (data) ->
-        console.log data
         conversation.new_messages = data.messages
         conversation.messages = [] unless conversation.messages
         conversation.message = {} unless conversation.message
@@ -69,6 +68,13 @@ window.schatter = (site_name, say, push) ->
       success: (data) ->
         callback()
 
+  absolute_time = (ts) ->
+    t = moment ts * 1000
+    t.format 'YY/MMM/DD HH:mm:ss'
+
+  display_message = (term, message) ->
+    say term, "#{absolute_time message.timestamp} #{conversation.person[message.person_id].email} #{message.content}"
+
   conversation_commands =
     say: (words...) ->
       term = this
@@ -84,7 +90,7 @@ window.schatter = (site_name, say, push) ->
       term = this
       load_messages conversation, ->
         for message in conversation.new_messages
-          say term, "#{moment message.timestamp * 1000} #{conversation.person[message.person_id].email} #{message.content}"
+          display_message term, message
       return
 
   join = (term, index) ->
@@ -101,8 +107,9 @@ window.schatter = (site_name, say, push) ->
       for person in conversation.people
         term.echo "  #{person.email}"
     load_messages conversation, ->
-        for message in conversation.messages
-          term.echo "#{moment message.timestamp * 1000} #{conversation.person[message.person_id].email} #{message.content}"
+      term.echo '...' if conversation.messages.length > 10
+      for message in conversation.messages.slice(-10)
+        display_message term, message
     push term, conversation_commands,
       prompt: "#{site_name}/chat/#{conversation.name} > "
     return
