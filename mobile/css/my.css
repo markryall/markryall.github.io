@@ -1,0 +1,21 @@
+body {
+  font-family: monospace;
+  font-size: 12px;
+  background-color: #000;
+  color: #FFF;
+}
+
+.i {
+  margin: 0px;
+}
+
+.cmdline {
+  background-color: #000;
+  color: #FFF;
+  border: 0px;
+  outline: 0pt none;
+  font-family: monospace;
+  font-size: 12px;
+  margin: 0px;
+  padding: 0px;
+}
