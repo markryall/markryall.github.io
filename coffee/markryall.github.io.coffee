@@ -111,6 +111,7 @@ $ ->
       first, you will need to log in to http://schatter.herokuapp.com to get your auth token.
       """
     music: -> music this,
+    fork: -> open 'https://github.com/markryall/markryall.github.io',
     eval: (strings...) ->
       result = window.eval strings.join ' '
       say this, String(result) if result

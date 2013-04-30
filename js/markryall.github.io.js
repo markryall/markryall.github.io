@@ -181,6 +181,9 @@
       music: function() {
         return music(this);
       },
+      fork: function() {
+        return open('https://github.com/markryall/markryall.github.io');
+      },
       "eval": function() {
         var result, strings;
 
