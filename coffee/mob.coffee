@@ -14,6 +14,8 @@ $ ->
 
   clear = () -> $('#history').html('')
 
+  reload = () -> window.location.reload true
+
   history = (command) ->
     say "#{prompt} #{command}"
 
@@ -27,6 +29,8 @@ $ ->
         say 'Gemfile      Gemfile.lock Guardfile    Rakefile     coffee       css          favicon.ico  index.html   js           mobile       spec'
       when 'clear'
         clear()
+      when 'reload'
+        reload()
       else
         say "command not found: #{command}"
 

@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var clear, decode, encode, execute, history, input, prompt, say;
+    var clear, decode, encode, execute, history, input, prompt, reload, say;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -17,6 +17,9 @@
     clear = function() {
       return $('#history').html('');
     };
+    reload = function() {
+      return window.location.reload(true);
+    };
     history = function(command) {
       return say("" + prompt + " " + command);
     };
@@ -30,6 +33,8 @@
           return say('Gemfile      Gemfile.lock Guardfile    Rakefile     coffee       css          favicon.ico  index.html   js           mobile       spec');
         case 'clear':
           return clear();
+        case 'reload':
+          return reload();
         default:
           return say("command not found: " + command);
       }
