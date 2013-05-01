@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var clear, command, completion, decode, encode, execute, files, history, input, prompt, reload, say, tabcomplete;
+    var clear, command, completion, decode, encode, execute, files, history, input, open, prompt, ran, reload, say, tabcomplete;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -9,28 +9,37 @@
       return $('<div/>').html(value).text();
     };
     prompt = "~markryall &gt; ";
-    input = '#inputfield';
-    history = '#history';
-    completion = '#completion';
+    input = $('#inputfield');
+    history = $('#history');
+    completion = $('#completion');
     say = function(message) {
-      return $('#history').append("<div>" + message + "</div>");
+      return history.append("<div>" + message + "</div>");
     };
     clear = function() {
-      return $('#history').html('');
+      return history.html('');
     };
     reload = function() {
       return window.location.reload(true);
     };
-    history = function(command) {
+    open = function(url) {
+      return window.open(url);
+    };
+    ran = function(command) {
       return say("" + prompt + " " + command);
     };
-    $(input).focus();
+    input.focus();
     $('body').click(function() {
-      return $(input).focus();
+      return input.focus();
     });
     files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js mobile spec".split(' ');
     execute = function(command) {
       switch (command) {
+        case 'call skype':
+          return open('skype:mark_ryall');
+        case 'call phone':
+          return open('skype:+61414740489');
+        case 'send email':
+          return open('mailto:mark@ryall.com');
         case 'ls':
           return say(files.join(' '));
         case 'clear':
@@ -46,36 +55,36 @@
       }
     };
     command = function() {
-      return $(input).val();
+      return input.val();
     };
     tabcomplete = function() {
       var all, exp, matches;
 
-      all = 'clear ls music reload'.split(' ');
+      all = 'call skype|call phone|clear|ls|music|reload|send email'.split('|');
       exp = new RegExp("^" + (command()));
       matches = $.grep(all, function(v) {
         return exp.test(v);
       });
       if (matches.length === 1) {
-        return $(input).val(matches[0]);
+        return input.val(matches[0]);
       } else {
-        return $(completion).html(matches.join(' '));
+        return completion.html(matches.join(' '));
       }
     };
-    $(input).keydown(function(e) {
-      $(completion).html('');
+    input.keydown(function(e) {
+      completion.html('');
       if (e.keyCode === 9) {
         tabcomplete();
         return e.preventDefault();
       }
     });
-    return $(input).keyup(function(e) {
+    return input.keyup(function(e) {
       switch (e.keyCode) {
         case 13:
-          history(command());
+          ran(command());
           execute(command());
-          $(input).val('');
-          return $(input).focus();
+          input.val('');
+          return input.focus();
       }
     });
   });
