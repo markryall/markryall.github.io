@@ -23,16 +23,14 @@ $ ->
 
   $('body').click -> $(input).focus()
 
+  files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js mobile spec".split ' '
+
   execute = (command) ->
     switch command
-      when 'ls'
-        say 'Gemfile      Gemfile.lock Guardfile    Rakefile     coffee       css          favicon.ico  index.html   js           mobile       spec'
-      when 'clear'
-        clear()
-      when 'reload'
-        reload()
-      else
-        say "command not found: #{command}"
+      when 'ls' then say files.join ' '
+      when 'clear' then clear()
+      when 'reload' then reload()
+      else say "command not found: #{command}"
 
   tabcomplete = () ->
 

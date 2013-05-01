@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var clear, decode, encode, execute, history, input, prompt, reload, say, tabcomplete;
+    var clear, decode, encode, execute, files, history, input, prompt, reload, say, tabcomplete;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -27,10 +27,11 @@
     $('body').click(function() {
       return $(input).focus();
     });
+    files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js mobile spec".split(' ');
     execute = function(command) {
       switch (command) {
         case 'ls':
-          return say('Gemfile      Gemfile.lock Guardfile    Rakefile     coffee       css          favicon.ico  index.html   js           mobile       spec');
+          return say(files.join(' '));
         case 'clear':
           return clear();
         case 'reload':
