@@ -1,18 +1,25 @@
 $ ->
-  prompt = "&gt; "
+  prompt = "~markryall &gt; "
+  input = '#inputfield'
 
   say = (message) ->
     $('#history').append "<div>#{message}</div>"
 
   history = (command) ->
-    say "#{prompt} <span class=\"i\">#{command}</span>"
+    say "#{prompt} #{command}"
 
-  $("#inputfield").focus()
+  $(input).focus()
 
-  $("#inputfield").keyup (e) ->
+  execute = (command) ->
+    switch command
+      when 'ls'
+        say 'Gemfile      Gemfile.lock Guardfile    Rakefile     coffee       css          favicon.ico  index.html   js           mobile       spec'
+
+  $(input).keyup (e) ->
     switch e.keyCode
       when 13
-        command = $("#inputfield").val()
+        command = $(input).val()
         history command
-        $("#inputfield").val("");
-        $("#inputfield").focus();
+        execute command
+        $(input).val ''
+        $(input).focus()

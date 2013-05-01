@@ -1,24 +1,32 @@
 (function() {
   $(function() {
-    var history, prompt, say;
+    var execute, history, input, prompt, say;
 
-    prompt = "&gt; ";
+    prompt = "~markryall &gt; ";
+    input = '#inputfield';
     say = function(message) {
       return $('#history').append("<div>" + message + "</div>");
     };
     history = function(command) {
-      return say("" + prompt + " <span class=\"i\">" + command + "</span>");
+      return say("" + prompt + " " + command);
     };
-    $("#inputfield").focus();
-    return $("#inputfield").keyup(function(e) {
+    $(input).focus();
+    execute = function(command) {
+      switch (command) {
+        case 'ls':
+          return say('Gemfile      Gemfile.lock Guardfile    Rakefile     coffee       css          favicon.ico  index.html   js           mobile       spec');
+      }
+    };
+    return $(input).keyup(function(e) {
       var command;
 
       switch (e.keyCode) {
         case 13:
-          command = $("#inputfield").val();
+          command = $(input).val();
           history(command);
-          $("#inputfield").val("");
-          return $("#inputfield").focus();
+          execute(command);
+          $(input).val('');
+          return $(input).focus();
       }
     });
   });
