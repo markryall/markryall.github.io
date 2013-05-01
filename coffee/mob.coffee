@@ -1,14 +1,18 @@
 $ ->
+  prompt = "&gt; "
+
+  say = (message) ->
+    $('#history').append "<div>#{message}</div>"
+
+  history = (command) ->
+    say "#{prompt} <span class=\"i\">#{command}</span>"
+
   $("#inputfield").focus()
 
   $("#inputfield").keyup (e) ->
     switch e.keyCode
       when 13
-        $('#history').append "<div>&gt; <span class=\"i\">#{$("#inputfield").val()}</span></div>"
+        command = $("#inputfield").val()
+        history command
         $("#inputfield").val("");
         $("#inputfield").focus();
-      #   break
-      # when 38
-      #   break
-      # when 40
-      #   break
