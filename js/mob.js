@@ -1,7 +1,13 @@
 (function() {
   $(function() {
-    var execute, history, input, prompt, say;
+    var decode, encode, execute, history, input, prompt, say;
 
+    encode = function(value) {
+      return $('<div/>').text(value).html();
+    };
+    decode = function(value) {
+      return $('<div/>').html(value).text();
+    };
     prompt = "~markryall &gt; ";
     input = '#inputfield';
     say = function(message) {
@@ -18,6 +24,8 @@
       switch (command) {
         case 'ls':
           return say('Gemfile      Gemfile.lock Guardfile    Rakefile     coffee       css          favicon.ico  index.html   js           mobile       spec');
+        default:
+          return say("command not found: " + command);
       }
     };
     return $(input).keyup(function(e) {
@@ -25,7 +33,7 @@
 
       switch (e.keyCode) {
         case 13:
-          command = $(input).val();
+          command = encode($(input).val());
           history(command);
           execute(command);
           $(input).val('');
