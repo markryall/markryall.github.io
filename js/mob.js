@@ -11,6 +11,9 @@
       return say("" + prompt + " " + command);
     };
     $(input).focus();
+    $('body').click(function() {
+      return $(input).focus();
+    });
     execute = function(command) {
       switch (command) {
         case 'ls':

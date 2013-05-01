@@ -10,6 +10,8 @@ $ ->
 
   $(input).focus()
 
+  $('body').click -> $(input).focus()
+
   execute = (command) ->
     switch command
       when 'ls'
