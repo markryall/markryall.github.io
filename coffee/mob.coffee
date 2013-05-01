@@ -7,9 +7,12 @@ $ ->
 
   prompt = "~markryall &gt; "
   input = '#inputfield'
+  history = '#history'
 
   say = (message) ->
     $('#history').append "<div>#{message}</div>"
+
+  clear = () -> $('#history').html('')
 
   history = (command) ->
     say "#{prompt} #{command}"
@@ -22,6 +25,8 @@ $ ->
     switch command
       when 'ls'
         say 'Gemfile      Gemfile.lock Guardfile    Rakefile     coffee       css          favicon.ico  index.html   js           mobile       spec'
+      when 'clear'
+        clear()
       else
         say "command not found: #{command}"
 
