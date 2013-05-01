@@ -2,7 +2,7 @@
   var __slice = [].slice;
 
   $(function() {
-    var commands, contact, date, email, feedback, links, music, name, open, push, say, site_name, submenu;
+    var commands, contact, email, feedback, links, music, name, open, push, say, site_name, submenu;
 
     say = function(term, message) {
       term.echo(message);
@@ -117,13 +117,6 @@
       mail: function() {
         return open('mailto:mark@ryall.com');
       }
-    };
-    date = function(string) {
-      var seconds, time;
-
-      seconds = parseInt(string);
-      time = moment(seconds * 1000);
-      return time.fromNow();
     };
     music = function(term) {
       $.ajax({

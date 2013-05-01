@@ -37,6 +37,10 @@
           return clear();
         case 'reload':
           return reload();
+        case 'music':
+          return window.lastfm(function(track) {
+            return say(track);
+          });
         default:
           return say("command not found: " + command);
       }

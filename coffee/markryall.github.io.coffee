@@ -67,11 +67,6 @@ $ ->
     phone: -> open 'skype:+61414740489',
     mail: -> open 'mailto:mark@ryall.com',
 
-  date = (string) ->
-    seconds = parseInt string
-    time = moment seconds * 1000
-    time.fromNow()
-
   music = (term) ->
     $.ajax
       url: 'http://ws.audioscrobbler.com/2.0/',

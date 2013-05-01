@@ -31,6 +31,7 @@ $ ->
       when 'ls' then say files.join ' '
       when 'clear' then clear()
       when 'reload' then reload()
+      when 'music' then window.lastfm (track) -> say track
       else say "command not found: #{command}"
 
   command = -> $(input).val()
