@@ -37,7 +37,7 @@ $ ->
   command = -> $(input).val()
 
   tabcomplete = () ->
-    all = 'clear ls reload'.split ' '
+    all = 'clear ls music reload'.split ' '
     exp = new RegExp "^#{command()}"
     matches = $.grep all, (v) -> exp.test v
     if matches.length == 1

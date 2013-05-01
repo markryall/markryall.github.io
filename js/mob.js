@@ -51,7 +51,7 @@
     tabcomplete = function() {
       var all, exp, matches;
 
-      all = 'clear ls reload'.split(' ');
+      all = 'clear ls music reload'.split(' ');
       exp = new RegExp("^" + (command()));
       matches = $.grep(all, function(v) {
         return exp.test(v);
