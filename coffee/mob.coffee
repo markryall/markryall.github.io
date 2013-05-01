@@ -8,6 +8,7 @@ $ ->
   prompt = "~markryall &gt; "
   input = '#inputfield'
   history = '#history'
+  completion = '#completion'
 
   say = (message) ->
     $('#history').append "<div>#{message}</div>"
@@ -32,9 +33,19 @@ $ ->
       when 'reload' then reload()
       else say "command not found: #{command}"
 
+  command = -> $(input).val()
+
   tabcomplete = () ->
+    all = 'clear ls reload'.split ' '
+    exp = new RegExp "^#{command()}"
+    matches = $.grep all, (v) -> exp.test v
+    if matches.length == 1
+      $(input).val matches[0]
+    else
+      $(completion).html(matches.join ' ')
 
   $(input).keydown (e) ->
+    $(completion).html('')
     if e.keyCode == 9
       tabcomplete()
       e.preventDefault()
@@ -42,9 +53,8 @@ $ ->
   $(input).keyup (e) ->
     switch e.keyCode
       when 13
-        command = encode $(input).val()
-        history command
-        execute command
+        history command()
+        execute command()
         $(input).val ''
         $(input).focus()
       # when 38 # up

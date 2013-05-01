@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var clear, decode, encode, execute, files, history, input, prompt, reload, say, tabcomplete;
+    var clear, command, completion, decode, encode, execute, files, history, input, prompt, reload, say, tabcomplete;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -11,6 +11,7 @@
     prompt = "~markryall &gt; ";
     input = '#inputfield';
     history = '#history';
+    completion = '#completion';
     say = function(message) {
       return $('#history').append("<div>" + message + "</div>");
     };
@@ -40,21 +41,35 @@
           return say("command not found: " + command);
       }
     };
-    tabcomplete = function() {};
+    command = function() {
+      return $(input).val();
+    };
+    tabcomplete = function() {
+      var all, exp, matches;
+
+      all = 'clear ls reload'.split(' ');
+      exp = new RegExp("^" + (command()));
+      matches = $.grep(all, function(v) {
+        return exp.test(v);
+      });
+      if (matches.length === 1) {
+        return $(input).val(matches[0]);
+      } else {
+        return $(completion).html(matches.join(' '));
+      }
+    };
     $(input).keydown(function(e) {
+      $(completion).html('');
       if (e.keyCode === 9) {
         tabcomplete();
         return e.preventDefault();
       }
     });
     return $(input).keyup(function(e) {
-      var command;
-
       switch (e.keyCode) {
         case 13:
-          command = encode($(input).val());
-          history(command);
-          execute(command);
+          history(command());
+          execute(command());
           $(input).val('');
           return $(input).focus();
       }
