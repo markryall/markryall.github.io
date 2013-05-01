@@ -34,6 +34,13 @@ $ ->
       else
         say "command not found: #{command}"
 
+  tabcomplete = () ->
+
+  $(input).keydown (e) ->
+    if e.keyCode == 9
+      tabcomplete()
+      e.preventDefault()
+
   $(input).keyup (e) ->
     switch e.keyCode
       when 13
@@ -42,3 +49,5 @@ $ ->
         execute command
         $(input).val ''
         $(input).focus()
+      # when 38 # up
+      # when 40 # down

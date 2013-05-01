@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var clear, decode, encode, execute, history, input, prompt, reload, say;
+    var clear, decode, encode, execute, history, input, prompt, reload, say, tabcomplete;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -39,6 +39,13 @@
           return say("command not found: " + command);
       }
     };
+    tabcomplete = function() {};
+    $(input).keydown(function(e) {
+      if (e.keyCode === 9) {
+        tabcomplete();
+        return e.preventDefault();
+      }
+    });
     return $(input).keyup(function(e) {
       var command;
 
