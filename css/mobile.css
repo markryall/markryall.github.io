@@ -1,6 +1,6 @@
 body {
   font-family: monospace;
-  font-size: 12px;
+  font-size: 18px;
   background-color: #000;
   color: #FFF;
 }
@@ -15,7 +15,8 @@ body {
   border: 0px;
   outline: 0pt none;
   font-family: monospace;
-  font-size: 12px;
+  font-size: 18px;
   margin: 0px;
   padding: 0px;
+  width: 98%;
 }
