@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var clear, command, commands, completion, decode, encode, execute, files, history, input, open, prompt, ran, reload, say, tabcomplete;
+    var age, clear, command, commands, completion, decode, encode, execute, files, history, input, open, prompt, ran, reload, say, tabcomplete;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -26,6 +26,22 @@
     };
     ran = function(command) {
       return say("" + prompt + " " + command);
+    };
+    age = function() {
+      var display, now, time, unit, _i, _len, _ref, _results;
+
+      now = moment();
+      time = moment(-25381800000);
+      display = function(unit) {
+        return say("" + (now.diff(time, unit)) + " " + unit);
+      };
+      _ref = "seconds minutes hours days weeks months years".split(' ');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        unit = _ref[_i];
+        _results.push(display(unit));
+      }
+      return _results;
     };
     input.focus();
     $('body').click(function() {
@@ -83,6 +99,9 @@
       },
       reload: function() {
         return reload();
+      },
+      age: function() {
+        return age();
       },
       music: function() {
         return window.lastfm(function(track) {

@@ -12,6 +12,11 @@ $ ->
   reload = () -> window.location.reload true
   open = (url) -> window.open url
   ran = (command) -> say "#{prompt} #{command}"
+  age = () ->
+    now = moment()
+    time = moment(-25381800000)
+    display = (unit)-> say "#{now.diff(time, unit)} #{unit}"
+    display unit for unit in "seconds minutes hours days weeks months years".split ' '
 
   input.focus()
 
@@ -37,6 +42,7 @@ $ ->
     ls: -> say files.join ' ',
     clear: -> clear(),
     reload: -> reload(),
+    age: -> age(),
     music: -> window.lastfm (track) -> say track
 
   execute = (command) ->

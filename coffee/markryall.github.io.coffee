@@ -50,43 +50,6 @@ $ ->
           display comment for comment in data
       return
 
-  links =
-    twitter: -> open 'http://twitter.com/markryall',
-    facebook: -> open 'http://facebook.com/mark.ryall',
-    github: -> open 'http://github.com/markryall',
-    bitbucket: -> open 'https://bitbucket.org/markryall',
-    coderwall: -> open 'https://coderwall.com/markryall',
-    linkedin: -> open 'http://linkedin.com/in/markryall',
-    flickr: -> open 'http://flickr.com/photos/markryall',
-    aboutme: -> open 'http://about.me/markryall',
-    lastfm: -> open 'http://last.fm/user/mryall',
-    goodreads: -> open 'http://www.goodreads.com/user/show/1908681-mark-ryall',
-
-  contact =
-    skype: -> open 'skype:mark_ryall',
-    phone: -> open 'skype:+61414740489',
-    mail: -> open 'mailto:mark@ryall.com',
-
-  music = (term) ->
-    $.ajax
-      url: 'http://ws.audioscrobbler.com/2.0/',
-      data:
-        'method': 'user.getrecenttracks',
-        'nowplaying': 'true',
-        'user': 'mryall',
-        'api_key': '21f8c75ad38637220b20a03ad61219a4',
-        'format': 'json',
-      success: (data) ->
-        display = (track) ->
-          description = "#{track.name} by #{track.artist['#text']} from #{track.album['#text']}"
-          message = if track['@attr'] and track['@attr'].nowplaying
-            "Now listening to #{description}"
-          else
-            "#{date track.date.uts}: #{description}"
-          term.echo message
-        display track for track in data.recenttracks.track
-    return
-
   submenu = (term, commands, menu_name, description) ->
     term.echo description
     term.echo '(hit ctrl-d or exit to return to main menu)\n'
@@ -94,9 +57,6 @@ $ ->
       prompt: "#{site_name}/#{menu_name} > "
 
   commands =
-    reload: -> window.location.reload true,
-    links: -> submenu this, links, 'links', 'here are some links to various sites i use',
-    contact: -> submenu this, contact, 'contact', 'here are some ways you can contact me',
     feedback: -> submenu this, feedback, 'feedback', 'here you can give me some feedback',
     chat: -> submenu this, window.schatter(site_name, say, push), 'chat', """
       here is where you will eventually be able to chat with me and other liberal like minded people
@@ -105,22 +65,9 @@ $ ->
 
       first, you will need to log in to http://schatter.herokuapp.com to get your auth token.
       """
-    music: -> music this,
-    fork: -> open 'https://github.com/markryall/markryall.github.io',
-    eval: (strings...) ->
-      result = window.eval strings.join ' '
-      say this, String(result) if result
 
   $('body').terminal commands,
-    greetings: """
-    hello, i am mark ryall
-
-    this site will not work without a keyboard so please don't
-    frustrate yourself if you are using a phone or tablet
-
-    hit the tab key to see the available commands
-
-    """,
+    greetings: "",
     prompt: "#{site_name} > ",
     tabcompletion: true,
     onBlur: -> false,
