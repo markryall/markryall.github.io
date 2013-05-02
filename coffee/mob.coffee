@@ -3,13 +3,40 @@ $ ->
   decode = (value) -> $('<div/>').html(value).text()
 
   prompt = "~markryall &gt; "
-  input = $('#inputfield')
-  history = $('#history')
-  completion = $('#completion')
+
+  input = $ '#input'
+  history = $ '#history'
+  completion = $ '#completion'
+  question = $ '#question'
+  terminal = $ '#terminal'
+  query = $ '#query'
+  answer = $ '#answer'
+
+  command = -> input.val()
 
   feedme = window.feedme()
 
   say = (message) -> history.append "<div>#{message}</div>"
+
+  answered = ->
+
+  ask = (prompt, callback) ->
+    question.text prompt
+    terminal.hide()
+    query.show()
+    answer.focus()
+    answered = (answer) -> callback(answer)
+
+  answer.keyup (e) ->
+    switch e.keyCode
+      when 13
+        a = answer.val()
+        answer.val ''
+        query.hide()
+        terminal.show()
+        input.focus()
+        answered a
+
   clear = () -> history.html ''
   reload = () -> window.location.reload true
   open = (url) -> window.open url
@@ -22,6 +49,13 @@ $ ->
 
   comments = ->
     feedme.comments (message) -> say message
+
+  comment = ->
+    ask 'what is your name ? ', (name) ->
+      ask 'what is your email ? ', (email) ->
+        ask 'what would you like to say ? ', (content) ->
+          feedme.comment name, email, content, (message) ->
+            say message
 
   files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js spec".split ' '
 
@@ -47,19 +81,18 @@ $ ->
     goodreads: -> open 'http://www.goodreads.com/user/show/1908681'
     fork: -> open 'https://github.com/markryall/markryall.github.io'
     ls: -> say files.join ' ',
+    music: -> window.lastfm (track) -> say track
     clear: clear,
     reload: reload,
     age: age,
-    music: -> window.lastfm (track) -> say track
-    comments: -> comments()
+    comments: comments,
+    comment: comment
 
   execute = (command) ->
     if commands[command]
       commands[command]()
     else
       say "command not found: #{command}"
-
-  command = -> input.val()
 
   tabcomplete = () ->
     all = Object.keys(commands).sort()

@@ -1,12 +1,13 @@
 window.feedme = ->
-  comment = (name, email, comment, callback) ->
+  comment = (name, email, content, callback) ->
+    data =
+      comment:
+        name: name,
+        email: email,
+        body: content
     $.ajax
-      url:'http://feedmeplease.herokuapp.com/comments/create',
-      data:
-        'comment':
-          'name': name,
-          'email': email,
-          'body': content,
+      url: 'http://feedmeplease.herokuapp.com/comments/create',
+      data: data,
       type: 'post',
       success: (data) ->
         callback 'thanks for the feedback'

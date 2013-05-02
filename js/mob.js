@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var age, clear, command, commands, comments, completion, decode, encode, execute, feedme, files, history, input, open, prompt, ran, reload, say, skype, tabcomplete;
+    var age, answer, answered, ask, clear, command, commands, comment, comments, completion, decode, encode, execute, feedme, files, history, input, open, prompt, query, question, ran, reload, say, skype, tabcomplete, terminal;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -9,13 +9,43 @@
       return $('<div/>').html(value).text();
     };
     prompt = "~markryall &gt; ";
-    input = $('#inputfield');
+    input = $('#input');
     history = $('#history');
     completion = $('#completion');
+    question = $('#question');
+    terminal = $('#terminal');
+    query = $('#query');
+    answer = $('#answer');
+    command = function() {
+      return input.val();
+    };
     feedme = window.feedme();
     say = function(message) {
       return history.append("<div>" + message + "</div>");
     };
+    answered = function() {};
+    ask = function(prompt, callback) {
+      question.text(prompt);
+      terminal.hide();
+      query.show();
+      answer.focus();
+      return answered = function(answer) {
+        return callback(answer);
+      };
+    };
+    answer.keyup(function(e) {
+      var a;
+
+      switch (e.keyCode) {
+        case 13:
+          a = answer.val();
+          answer.val('');
+          query.hide();
+          terminal.show();
+          input.focus();
+          return answered(a);
+      }
+    });
     clear = function() {
       return history.html('');
     };
@@ -47,6 +77,17 @@
     comments = function() {
       return feedme.comments(function(message) {
         return say(message);
+      });
+    };
+    comment = function() {
+      return ask('what is your name ? ', function(name) {
+        return ask('what is your email ? ', function(email) {
+          return ask('what would you like to say ? ', function(content) {
+            return feedme.comment(name, email, content, function(message) {
+              return say(message);
+            });
+          });
+        });
       });
     };
     files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js spec".split(' ');
@@ -101,17 +142,16 @@
       ls: function() {
         return say(files.join(' '));
       },
-      clear: clear,
-      reload: reload,
-      age: age,
       music: function() {
         return window.lastfm(function(track) {
           return say(track);
         });
       },
-      comments: function() {
-        return comments();
-      }
+      clear: clear,
+      reload: reload,
+      age: age,
+      comments: comments,
+      comment: comment
     };
     execute = function(command) {
       if (commands[command]) {
@@ -119,9 +159,6 @@
       } else {
         return say("command not found: " + command);
       }
-    };
-    command = function() {
-      return input.val();
     };
     tabcomplete = function() {
       var all, exp, matches;

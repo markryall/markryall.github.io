@@ -5,10 +5,6 @@ body {
   color: #FFF;
 }
 
-.i {
-  margin: 0px;
-}
-
 .cmdline {
   background-color: #000;
   color: #FFF;
@@ -18,5 +14,8 @@ body {
   font-size: 18px;
   margin: 0px;
   padding: 0px;
+}
+
+#input {
   width: 80%;
 }

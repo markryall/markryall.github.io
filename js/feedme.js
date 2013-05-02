@@ -2,16 +2,19 @@
   window.feedme = function() {
     var comment, comments;
 
-    comment = function(name, email, comment, callback) {
+    comment = function(name, email, content, callback) {
+      var data;
+
+      data = {
+        comment: {
+          name: name,
+          email: email,
+          body: content
+        }
+      };
       return $.ajax({
         url: 'http://feedmeplease.herokuapp.com/comments/create',
-        data: {
-          'comment': {
-            'name': name,
-            'email': email,
-            'body': content
-          }
-        },
+        data: data,
         type: 'post',
         success: function(data) {
           return callback('thanks for the feedback');
