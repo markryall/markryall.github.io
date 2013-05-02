@@ -7,22 +7,23 @@ $ ->
   history = $('#history')
   completion = $('#completion')
 
+  feedme = window.feedme()
+
   say = (message) -> history.append "<div>#{message}</div>"
   clear = () -> history.html ''
   reload = () -> window.location.reload true
   open = (url) -> window.open url
   ran = (command) -> say "#{prompt} #{command}"
-  age = () ->
+  age = ->
     now = moment()
     time = moment(-25381800000)
     display = (unit)-> say "#{now.diff(time, unit)} #{unit}"
     display unit for unit in "seconds minutes hours days weeks months years".split ' '
 
-  input.focus()
+  comments = ->
+    feedme.comments (message) -> say message
 
-  $('body').click -> input.focus()
-
-  files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js mobile spec".split ' '
+  files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js spec".split ' '
 
   skype = (account) ->
     say account
@@ -46,10 +47,11 @@ $ ->
     goodreads: -> open 'http://www.goodreads.com/user/show/1908681'
     fork: -> open 'https://github.com/markryall/markryall.github.io'
     ls: -> say files.join ' ',
-    clear: -> clear(),
-    reload: -> reload(),
-    age: -> age(),
+    clear: clear,
+    reload: reload,
+    age: age,
     music: -> window.lastfm (track) -> say track
+    comments: -> comments()
 
   execute = (command) ->
     if commands[command]
@@ -83,3 +85,7 @@ $ ->
         input.focus()
       # when 38 # up
       # when 40 # down
+
+  input.focus()
+
+  $('body').click -> input.focus()

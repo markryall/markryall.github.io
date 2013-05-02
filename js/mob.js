@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var age, clear, command, commands, completion, decode, encode, execute, files, history, input, open, prompt, ran, reload, say, skype, tabcomplete;
+    var age, clear, command, commands, comments, completion, decode, encode, execute, feedme, files, history, input, open, prompt, ran, reload, say, skype, tabcomplete;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -12,6 +12,7 @@
     input = $('#inputfield');
     history = $('#history');
     completion = $('#completion');
+    feedme = window.feedme();
     say = function(message) {
       return history.append("<div>" + message + "</div>");
     };
@@ -43,11 +44,12 @@
       }
       return _results;
     };
-    input.focus();
-    $('body').click(function() {
-      return input.focus();
-    });
-    files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js mobile spec".split(' ');
+    comments = function() {
+      return feedme.comments(function(message) {
+        return say(message);
+      });
+    };
+    files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js spec".split(' ');
     skype = function(account) {
       say(account);
       return open("skype:" + account);
@@ -99,19 +101,16 @@
       ls: function() {
         return say(files.join(' '));
       },
-      clear: function() {
-        return clear();
-      },
-      reload: function() {
-        return reload();
-      },
-      age: function() {
-        return age();
-      },
+      clear: clear,
+      reload: reload,
+      age: age,
       music: function() {
         return window.lastfm(function(track) {
           return say(track);
         });
+      },
+      comments: function() {
+        return comments();
       }
     };
     execute = function(command) {
@@ -145,7 +144,7 @@
         return e.preventDefault();
       }
     });
-    return input.keyup(function(e) {
+    input.keyup(function(e) {
       switch (e.keyCode) {
         case 13:
           ran(command());
@@ -153,6 +152,10 @@
           input.val('');
           return input.focus();
       }
+    });
+    input.focus();
+    return $('body').click(function() {
+      return input.focus();
     });
   });
 
