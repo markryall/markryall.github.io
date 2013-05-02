@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var age, answer, answered, ask, clear, command, commands, comment, comments, completion, decode, encode, execute, feedme, files, history, input, open, prompt, query, question, ran, reload, say, skype, tabcomplete, terminal;
+    var age, answer, answered, ask, clear, command, commands, comment, comments, completion, decode, encode, execute, feedme, files, history, input, open, prompt, query, question, ran, reload, say, show_question, show_terminal, skype, tabcomplete, terminal;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -25,24 +25,32 @@
     };
     answered = function() {};
     ask = function(prompt, callback) {
-      question.text(prompt);
-      terminal.hide();
-      query.show();
-      answer.focus();
+      show_question(prompt);
       return answered = function(answer) {
         return callback(answer);
       };
+    };
+    show_question = function(prompt) {
+      question.text(prompt);
+      answer.val('');
+      terminal.hide();
+      query.show();
+      return answer.focus();
+    };
+    show_terminal = function() {
+      query.hide();
+      terminal.show();
+      return input.focus();
     };
     answer.keyup(function(e) {
       var a;
 
       switch (e.keyCode) {
+        case 27:
+          return show_terminal();
         case 13:
           a = answer.val();
-          answer.val('');
-          query.hide();
-          terminal.show();
-          input.focus();
+          show_terminal();
           return answered(a);
       }
     });

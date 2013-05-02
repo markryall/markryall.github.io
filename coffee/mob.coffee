@@ -21,20 +21,28 @@ $ ->
   answered = ->
 
   ask = (prompt, callback) ->
+    show_question prompt
+    answered = (answer) -> callback(answer)
+
+  show_question = (prompt) ->
     question.text prompt
+    answer.val ''
     terminal.hide()
     query.show()
     answer.focus()
-    answered = (answer) -> callback(answer)
+
+  show_terminal = ->
+    query.hide()
+    terminal.show()
+    input.focus()
 
   answer.keyup (e) ->
     switch e.keyCode
+      when 27
+        show_terminal()
       when 13
         a = answer.val()
-        answer.val ''
-        query.hide()
-        terminal.show()
-        input.focus()
+        show_terminal()
         answered a
 
   clear = () -> history.html ''
