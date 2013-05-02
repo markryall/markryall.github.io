@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var clear, command, completion, decode, encode, execute, files, history, input, open, prompt, ran, reload, say, tabcomplete;
+    var clear, command, commands, completion, decode, encode, execute, files, history, input, open, prompt, ran, reload, say, tabcomplete;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -32,26 +32,36 @@
       return input.focus();
     });
     files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js mobile spec".split(' ');
+    commands = {
+      'call skype': function() {
+        return open('skype:mark_ryall');
+      },
+      'call phone': function() {
+        return open('skype:+61414740489');
+      },
+      'send email': function() {
+        return open('mailto:mark@ryall.com');
+      },
+      ls: function() {
+        return say(files.join(' '));
+      },
+      clear: function() {
+        return clear();
+      },
+      reload: function() {
+        return reload();
+      },
+      music: function() {
+        return window.lastfm(function(track) {
+          return say(track);
+        });
+      }
+    };
     execute = function(command) {
-      switch (command) {
-        case 'call skype':
-          return open('skype:mark_ryall');
-        case 'call phone':
-          return open('skype:+61414740489');
-        case 'send email':
-          return open('mailto:mark@ryall.com');
-        case 'ls':
-          return say(files.join(' '));
-        case 'clear':
-          return clear();
-        case 'reload':
-          return reload();
-        case 'music':
-          return window.lastfm(function(track) {
-            return say(track);
-          });
-        default:
-          return say("command not found: " + command);
+      if (commands[command]) {
+        return commands[command]();
+      } else {
+        return say("command not found: " + command);
       }
     };
     command = function() {
@@ -60,7 +70,7 @@
     tabcomplete = function() {
       var all, exp, matches;
 
-      all = 'call skype|call phone|clear|ls|music|reload|send email'.split('|');
+      all = Object.keys(commands);
       exp = new RegExp("^" + (command()));
       matches = $.grep(all, function(v) {
         return exp.test(v);

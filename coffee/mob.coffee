@@ -19,21 +19,25 @@ $ ->
 
   files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js mobile spec".split ' '
 
+  commands =
+    'call skype': -> open 'skype:mark_ryall',
+    'call phone': -> open 'skype:+61414740489',
+    'send email': -> open 'mailto:mark@ryall.com',
+    ls: -> say files.join ' ',
+    clear: -> clear(),
+    reload: -> reload(),
+    music: -> window.lastfm (track) -> say track
+
   execute = (command) ->
-    switch command
-      when 'call skype' then open 'skype:mark_ryall'
-      when 'call phone' then open 'skype:+61414740489'
-      when 'send email' then open 'mailto:mark@ryall.com'
-      when 'ls' then say files.join ' '
-      when 'clear' then clear()
-      when 'reload' then reload()
-      when 'music' then window.lastfm (track) -> say track
-      else say "command not found: #{command}"
+    if commands[command]
+      commands[command]()
+    else
+      say "command not found: #{command}"
 
   command = -> input.val()
 
   tabcomplete = () ->
-    all = 'call skype|call phone|clear|ls|music|reload|send email'.split '|'
+    all = Object.keys commands
     exp = new RegExp "^#{command()}"
     matches = $.grep all, (v) -> exp.test v
     if matches.length == 1
