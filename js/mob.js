@@ -91,7 +91,7 @@
         return open('http://last.fm/user/mryall');
       },
       goodreads: function() {
-        return open('http://www.goodreads.com/user/show/1908681-mark-ryall');
+        return open('http://www.goodreads.com/user/show/1908681');
       },
       fork: function() {
         return open('https://github.com/markryall/markryall.github.io');

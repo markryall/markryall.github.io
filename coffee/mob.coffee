@@ -43,7 +43,7 @@ $ ->
     flickr: -> open 'http://flickr.com/photos/markryall',
     aboutme: -> open 'http://about.me/markryall',
     lastfm: -> open 'http://last.fm/user/mryall',
-    goodreads: -> open 'http://www.goodreads.com/user/show/1908681-mark-ryall'
+    goodreads: -> open 'http://www.goodreads.com/user/show/1908681'
     fork: -> open 'https://github.com/markryall/markryall.github.io'
     ls: -> say files.join ' ',
     clear: -> clear(),
