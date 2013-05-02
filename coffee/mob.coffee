@@ -24,10 +24,16 @@ $ ->
 
   files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js mobile spec".split ' '
 
+  skype = (account) ->
+    say account
+    open "skype:#{account}"
+
   commands =
-    'call skype': -> open 'skype:mark_ryall',
-    'call phone': -> open 'skype:+61414740489',
-    'send email': -> open 'mailto:mark@ryall.com',
+    skype: -> skype 'mark_ryall',
+    phone: -> skype '+61414740489',
+    email: ->
+      say 'mark@ryall.name'
+      open 'mailto:mark@ryall.name',
     twitter: -> open 'http://twitter.com/markryall',
     facebook: -> open 'http://facebook.com/mark.ryall',
     github: -> open 'http://github.com/markryall',

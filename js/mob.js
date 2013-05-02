@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var age, clear, command, commands, completion, decode, encode, execute, files, history, input, open, prompt, ran, reload, say, tabcomplete;
+    var age, clear, command, commands, completion, decode, encode, execute, files, history, input, open, prompt, ran, reload, say, skype, tabcomplete;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -48,15 +48,20 @@
       return input.focus();
     });
     files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js mobile spec".split(' ');
+    skype = function(account) {
+      say(account);
+      return open("skype:" + account);
+    };
     commands = {
-      'call skype': function() {
-        return open('skype:mark_ryall');
+      skype: function() {
+        return skype('mark_ryall');
       },
-      'call phone': function() {
-        return open('skype:+61414740489');
+      phone: function() {
+        return skype('+61414740489');
       },
-      'send email': function() {
-        return open('mailto:mark@ryall.com');
+      email: function() {
+        say('mark@ryall.name');
+        return open('mailto:mark@ryall.name');
       },
       twitter: function() {
         return open('http://twitter.com/markryall');
