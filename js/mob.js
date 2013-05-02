@@ -42,6 +42,39 @@
       'send email': function() {
         return open('mailto:mark@ryall.com');
       },
+      twitter: function() {
+        return open('http://twitter.com/markryall');
+      },
+      facebook: function() {
+        return open('http://facebook.com/mark.ryall');
+      },
+      github: function() {
+        return open('http://github.com/markryall');
+      },
+      bitbucket: function() {
+        return open('https://bitbucket.org/markryall');
+      },
+      coderwall: function() {
+        return open('https://coderwall.com/markryall');
+      },
+      linkedin: function() {
+        return open('http://linkedin.com/in/markryall');
+      },
+      flickr: function() {
+        return open('http://flickr.com/photos/markryall');
+      },
+      aboutme: function() {
+        return open('http://about.me/markryall');
+      },
+      lastfm: function() {
+        return open('http://last.fm/user/mryall');
+      },
+      goodreads: function() {
+        return open('http://www.goodreads.com/user/show/1908681-mark-ryall');
+      },
+      fork: function() {
+        return open('https://github.com/markryall/markryall.github.io');
+      },
       ls: function() {
         return say(files.join(' '));
       },
@@ -70,7 +103,7 @@
     tabcomplete = function() {
       var all, exp, matches;
 
-      all = Object.keys(commands);
+      all = Object.keys(commands).sort();
       exp = new RegExp("^" + (command()));
       matches = $.grep(all, function(v) {
         return exp.test(v);
@@ -78,7 +111,7 @@
       if (matches.length === 1) {
         return input.val(matches[0]);
       } else {
-        return completion.html(matches.join(' '));
+        return completion.html(matches.join('<br>'));
       }
     };
     input.keydown(function(e) {

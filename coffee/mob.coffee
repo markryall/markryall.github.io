@@ -23,6 +23,17 @@ $ ->
     'call skype': -> open 'skype:mark_ryall',
     'call phone': -> open 'skype:+61414740489',
     'send email': -> open 'mailto:mark@ryall.com',
+    twitter: -> open 'http://twitter.com/markryall',
+    facebook: -> open 'http://facebook.com/mark.ryall',
+    github: -> open 'http://github.com/markryall',
+    bitbucket: -> open 'https://bitbucket.org/markryall',
+    coderwall: -> open 'https://coderwall.com/markryall',
+    linkedin: -> open 'http://linkedin.com/in/markryall',
+    flickr: -> open 'http://flickr.com/photos/markryall',
+    aboutme: -> open 'http://about.me/markryall',
+    lastfm: -> open 'http://last.fm/user/mryall',
+    goodreads: -> open 'http://www.goodreads.com/user/show/1908681-mark-ryall'
+    fork: -> open 'https://github.com/markryall/markryall.github.io'
     ls: -> say files.join ' ',
     clear: -> clear(),
     reload: -> reload(),
@@ -37,13 +48,13 @@ $ ->
   command = -> input.val()
 
   tabcomplete = () ->
-    all = Object.keys commands
+    all = Object.keys(commands).sort()
     exp = new RegExp "^#{command()}"
     matches = $.grep all, (v) -> exp.test v
     if matches.length == 1
       input.val matches[0]
     else
-      completion.html(matches.join ' ')
+      completion.html(matches.join '<br>')
 
   input.keydown (e) ->
     completion.html ''
