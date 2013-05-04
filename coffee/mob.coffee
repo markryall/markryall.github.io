@@ -56,7 +56,7 @@ $ ->
     display unit for unit in "seconds minutes hours days weeks months years".split ' '
 
   comments = ->
-    feedme.comments (message) -> say message
+    feedme.comments (message) -> say encode message
 
   comment = ->
     ask 'what is your name ? ', (name) ->

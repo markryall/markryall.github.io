@@ -84,7 +84,7 @@
     };
     comments = function() {
       return feedme.comments(function(message) {
-        return say(message);
+        return say(encode(message));
       });
     };
     comment = function() {
