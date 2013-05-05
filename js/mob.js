@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var age, answer, answered, ask, clear, command, commands, comment, comments, completion, decode, encode, execute, feedme, files, history, input, open, prompt, query, question, ran, reload, say, show_question, show_terminal, skype, tabcomplete, terminal;
+    var age, answer, answered, ask, clear, command, commands, commands_for, comment, comments, completion, decode, email, encode, execute, feedme, files, history, input, load_deets, open, prompt, query, question, ran, reload, repository, say, show_question, show_terminal, tabcomplete, terminal;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -8,7 +8,8 @@
     decode = function(value) {
       return $('<div/>').html(value).text();
     };
-    prompt = "~markryall &gt; ";
+    email = 'mark@ryall.name';
+    prompt = "~" + email + " &gt; ";
     input = $('#input');
     history = $('#history');
     completion = $('#completion');
@@ -16,6 +17,8 @@
     terminal = $('#terminal');
     query = $('#query');
     answer = $('#answer');
+    repository = 'https://github.com/markryall/markryall.github.io';
+    commands = {};
     command = function() {
       return input.val();
     };
@@ -66,11 +69,11 @@
     ran = function(command) {
       return say("" + prompt + " " + command);
     };
-    age = function() {
+    age = function(birth) {
       var display, now, time, unit, _i, _len, _ref, _results;
 
       now = moment();
-      time = moment(-25381800000);
+      time = moment(birth);
       display = function(unit) {
         return say("" + (now.diff(time, unit)) + " " + unit);
       };
@@ -99,68 +102,54 @@
       });
     };
     files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js spec".split(' ');
-    skype = function(account) {
-      say(account);
-      return open("skype:" + account);
+    commands_for = function(data) {
+      var k, v, _ref, _results;
+
+      commands = {
+        fork: function() {
+          return open(repository);
+        },
+        ls: function() {
+          return say(files.join(' '));
+        },
+        music: function() {
+          return window.lastfm(function(track) {
+            return say(track);
+          });
+        },
+        clear: clear,
+        reload: reload,
+        comments: comments,
+        comment: comment
+      };
+      if (data) {
+        commands.age = function() {
+          return age(data.birth);
+        };
+        _ref = data.links;
+        _results = [];
+        for (k in _ref) {
+          v = _ref[k];
+          _results.push(commands[k] = function() {
+            return open(v);
+          });
+        }
+        return _results;
+      }
     };
-    commands = {
-      skype: function() {
-        return skype('mark_ryall');
-      },
-      phone: function() {
-        return skype('+61414740489');
-      },
-      email: function() {
-        say('mark@ryall.name');
-        return open('mailto:mark@ryall.name');
-      },
-      twitter: function() {
-        return open('http://twitter.com/markryall');
-      },
-      facebook: function() {
-        return open('http://facebook.com/mark.ryall');
-      },
-      github: function() {
-        return open('http://github.com/markryall');
-      },
-      bitbucket: function() {
-        return open('https://bitbucket.org/markryall');
-      },
-      coderwall: function() {
-        return open('https://coderwall.com/markryall');
-      },
-      linkedin: function() {
-        return open('http://linkedin.com/in/markryall');
-      },
-      flickr: function() {
-        return open('http://flickr.com/photos/markryall');
-      },
-      aboutme: function() {
-        return open('http://about.me/markryall');
-      },
-      lastfm: function() {
-        return open('http://last.fm/user/mryall');
-      },
-      goodreads: function() {
-        return open('http://www.goodreads.com/user/show/1908681');
-      },
-      fork: function() {
-        return open('https://github.com/markryall/markryall.github.io');
-      },
-      ls: function() {
-        return say(files.join(' '));
-      },
-      music: function() {
-        return window.lastfm(function(track) {
-          return say(track);
-        });
-      },
-      clear: clear,
-      reload: reload,
-      age: age,
-      comments: comments,
-      comment: comment
+    commands_for(null);
+    load_deets = function(email) {
+      return $.ajax({
+        url: "https://deets.herokuapp.com/deets/" + (MD5(email)),
+        headers: {
+          'Accept': 'application/json'
+        },
+        success: function(data) {
+          return commands_for(data);
+        }
+      });
     };
+    load_deets(email);
     execute = function(command) {
       if (commands[command]) {
         return commands[command]();

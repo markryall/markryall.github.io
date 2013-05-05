@@ -2,8 +2,8 @@ $ ->
   encode = (value) -> $('<div/>').text(value).html()
   decode = (value) -> $('<div/>').html(value).text()
 
-  prompt = "~markryall &gt; "
-
+  email = 'mark@ryall.name'
+  prompt = "~#{email} &gt; "
   input = $ '#input'
   history = $ '#history'
   completion = $ '#completion'
@@ -11,6 +11,8 @@ $ ->
   terminal = $ '#terminal'
   query = $ '#query'
   answer = $ '#answer'
+  repository = 'https://github.com/markryall/markryall.github.io'
+  commands = {}
 
   command = -> input.val()
 
@@ -49,9 +51,9 @@ $ ->
   reload = () -> window.location.reload true
   open = (url) -> window.open url
   ran = (command) -> say "#{prompt} #{command}"
-  age = ->
+  age = (birth) ->
     now = moment()
-    time = moment(-25381800000)
+    time = moment birth
     display = (unit)-> say "#{now.diff(time, unit)} #{unit}"
     display unit for unit in "seconds minutes hours days weeks months years".split ' '
 
@@ -67,34 +69,31 @@ $ ->
 
   files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js spec".split ' '
 
-  skype = (account) ->
-    say account
-    open "skype:#{account}"
+  commands_for = (data) ->
+    commands =
+      fork: -> open repository,
+      ls: -> say files.join ' ',
+      music: -> window.lastfm (track) -> say track,
+      clear: clear,
+      reload: reload,
+      comments: comments,
+      comment: comment
+    if data
+      commands.age = -> age data.birth
+      for k,v of data.links
+        commands[k] = -> open v
 
-  commands =
-    skype: -> skype 'mark_ryall',
-    phone: -> skype '+61414740489',
-    email: ->
-      say 'mark@ryall.name'
-      open 'mailto:mark@ryall.name',
-    twitter: -> open 'http://twitter.com/markryall',
-    facebook: -> open 'http://facebook.com/mark.ryall',
-    github: -> open 'http://github.com/markryall',
-    bitbucket: -> open 'https://bitbucket.org/markryall',
-    coderwall: -> open 'https://coderwall.com/markryall',
-    linkedin: -> open 'http://linkedin.com/in/markryall',
-    flickr: -> open 'http://flickr.com/photos/markryall',
-    aboutme: -> open 'http://about.me/markryall',
-    lastfm: -> open 'http://last.fm/user/mryall',
-    goodreads: -> open 'http://www.goodreads.com/user/show/1908681'
-    fork: -> open 'https://github.com/markryall/markryall.github.io'
-    ls: -> say files.join ' ',
-    music: -> window.lastfm (track) -> say track
-    clear: clear,
-    reload: reload,
-    age: age,
-    comments: comments,
-    comment: comment
+  commands_for null
+
+  load_deets = (email) ->
+    $.ajax
+      url: "https://deets.herokuapp.com/deets/#{MD5 email}",
+      headers:
+        'Accept': 'application/json',
+      success: (data) ->
+        commands_for data
+
+  load_deets email
 
   execute = (command) ->
     if commands[command]
