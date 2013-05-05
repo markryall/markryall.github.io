@@ -71,6 +71,9 @@ $ ->
 
   ssh = (user) -> load_deets user
 
+  link_command = (link) ->
+    -> open link
+
   commands_for = (data) ->
     commands =
       fork: -> open repository,
@@ -83,8 +86,7 @@ $ ->
       commands.comments = comments
       commands.comment = comment
       commands.age = -> age data.birth
-      for k,v of data.links
-        commands[k] = -> open v
+      commands[k] = link_command v for k,v of data.links
 
   commands_for null
 

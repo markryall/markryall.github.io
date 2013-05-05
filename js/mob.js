@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var age, answer, answered, ask, clear, command, command_regexp, commands, commands_for, comment, comments, completion, decode, email, encode, execute, feedme, files, history, input, load_deets, open, ps1, query, question, ran, reload, repository, say, show_question, show_terminal, ssh, tabcomplete, terminal;
+    var age, answer, answered, ask, clear, command, command_regexp, commands, commands_for, comment, comments, completion, decode, email, encode, execute, feedme, files, history, input, link_command, load_deets, open, ps1, query, question, ran, reload, repository, say, show_question, show_terminal, ssh, tabcomplete, terminal;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -105,6 +105,11 @@
     ssh = function(user) {
       return load_deets(user);
     };
+    link_command = function(link) {
+      return function() {
+        return open(link);
+      };
+    };
     commands_for = function(data) {
       var k, v, _ref, _results;
 
@@ -134,9 +139,7 @@
         _results = [];
         for (k in _ref) {
           v = _ref[k];
-          _results.push(commands[k] = function() {
-            return open(v);
-          });
+          _results.push(commands[k] = link_command(v));
         }
         return _results;
       }
