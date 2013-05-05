@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var age, answer, answered, ask, clear, command, commands, commands_for, comment, comments, completion, decode, email, encode, execute, feedme, files, history, input, load_deets, open, prompt, query, question, ran, reload, repository, say, show_question, show_terminal, tabcomplete, terminal;
+    var age, answer, answered, ask, clear, command, command_regexp, commands, commands_for, comment, comments, completion, decode, email, encode, execute, feedme, files, history, input, load_deets, open, ps1, query, question, ran, reload, repository, say, show_question, show_terminal, ssh, tabcomplete, terminal;
 
     encode = function(value) {
       return $('<div/>').text(value).html();
@@ -9,12 +9,12 @@
       return $('<div/>').html(value).text();
     };
     email = 'mark@ryall.name';
-    prompt = "~" + email + " &gt; ";
     input = $('#input');
     history = $('#history');
     completion = $('#completion');
     question = $('#question');
     terminal = $('#terminal');
+    ps1 = $('#PS1');
     query = $('#query');
     answer = $('#answer');
     repository = 'https://github.com/markryall/markryall.github.io';
@@ -67,7 +67,7 @@
       return window.open(url);
     };
     ran = function(command) {
-      return say("" + prompt + " " + command);
+      return say("" + (ps1.text()) + " " + command);
     };
     age = function(birth) {
       var display, now, time, unit, _i, _len, _ref, _results;
@@ -102,6 +102,9 @@
       });
     };
     files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js spec".split(' ');
+    ssh = function(user) {
+      return load_deets(user);
+    };
     commands_for = function(data) {
       var k, v, _ref, _results;
 
@@ -120,7 +123,8 @@
         clear: clear,
         reload: reload,
         comments: comments,
-        comment: comment
+        comment: comment,
+        ssh: ssh
       };
       if (data) {
         commands.age = function() {
@@ -139,22 +143,28 @@
     };
     commands_for(null);
     load_deets = function(email) {
+      say("loading details for " + email);
       return $.ajax({
         url: "https://deets.herokuapp.com/deets/" + (MD5(email)),
         headers: {
           'Accept': 'application/json'
         },
         success: function(data) {
+          ps1.text("~" + email + " > ");
           return commands_for(data);
         }
       });
     };
     load_deets(email);
+    command_regexp = new RegExp("^(\\w+)(.*)");
     execute = function(command) {
-      if (commands[command]) {
-        return commands[command]();
+      var matches;
+
+      matches = command_regexp.exec(command);
+      if (commands[matches[1]]) {
+        return commands[matches[1]](matches[2].trim());
       } else {
-        return say("command not found: " + command);
+        return say("command not found: " + matches[1]);
       }
     };
     tabcomplete = function() {

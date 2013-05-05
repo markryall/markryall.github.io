@@ -3,12 +3,12 @@ $ ->
   decode = (value) -> $('<div/>').html(value).text()
 
   email = 'mark@ryall.name'
-  prompt = "~#{email} &gt; "
   input = $ '#input'
   history = $ '#history'
   completion = $ '#completion'
   question = $ '#question'
   terminal = $ '#terminal'
+  ps1 = $ '#PS1'
   query = $ '#query'
   answer = $ '#answer'
   repository = 'https://github.com/markryall/markryall.github.io'
@@ -50,7 +50,7 @@ $ ->
   clear = () -> history.html ''
   reload = () -> window.location.reload true
   open = (url) -> window.open url
-  ran = (command) -> say "#{prompt} #{command}"
+  ran = (command) -> say "#{ps1.text()} #{command}"
   age = (birth) ->
     now = moment()
     time = moment birth
@@ -69,6 +69,8 @@ $ ->
 
   files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js spec".split ' '
 
+  ssh = (user) -> load_deets user
+
   commands_for = (data) ->
     commands =
       fork: -> open repository,
@@ -77,7 +79,8 @@ $ ->
       clear: clear,
       reload: reload,
       comments: comments,
-      comment: comment
+      comment: comment,
+      ssh: ssh
     if data
       commands.age = -> age data.birth
       for k,v of data.links
@@ -86,20 +89,24 @@ $ ->
   commands_for null
 
   load_deets = (email) ->
+    say "loading details for #{email}"
     $.ajax
       url: "https://deets.herokuapp.com/deets/#{MD5 email}",
       headers:
         'Accept': 'application/json',
       success: (data) ->
+        ps1.text "~#{email} > "
         commands_for data
 
   load_deets email
 
+  command_regexp = new RegExp "^(\\w+)(.*)"
   execute = (command) ->
-    if commands[command]
-      commands[command]()
+    matches = command_regexp.exec command
+    if commands[matches[1]]
+      commands[matches[1]] matches[2].trim()
     else
-      say "command not found: #{command}"
+      say "command not found: #{matches[1]}"
 
   tabcomplete = () ->
     all = Object.keys(commands).sort()
