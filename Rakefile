@@ -7,7 +7,7 @@ rescue LoadError
   end
 end
 
-task :default => ['jasmine:ci']
+task default: :publish
 
 task :publish do
   sh 'rsync -r * sh:www/mark.ryall.name'
