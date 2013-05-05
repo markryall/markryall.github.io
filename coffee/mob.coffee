@@ -58,13 +58,13 @@ $ ->
     display unit for unit in "seconds minutes hours days weeks months years".split ' '
 
   comments = ->
-    feedme.comments (message) -> say encode message
+    feedme.comments MD5(email), (message) -> say encode message
 
   comment = ->
-    ask 'what is your name ? ', (name) ->
-      ask 'what is your email ? ', (email) ->
+    ask 'what is your name ? ', (from_name) ->
+      ask 'what is your email ? ', (from_email) ->
         ask 'what would you like to say ? ', (content) ->
-          feedme.comment name, email, content, (message) ->
+          feedme.comment MD5(email), from_name, from_email, content, (message) ->
             say message
 
   files = "Gemfile Gemfile.lock Guardfile Rakefile coffee css favicon.ico index.html js spec".split ' '
@@ -78,10 +78,10 @@ $ ->
       music: -> window.lastfm (track) -> say track,
       clear: clear,
       reload: reload,
-      comments: comments,
-      comment: comment,
       ssh: ssh
     if data
+      commands.comments = comments
+      commands.comment = comment
       commands.age = -> age data.birth
       for k,v of data.links
         commands[k] = -> open v

@@ -2,11 +2,12 @@
   window.feedme = function() {
     var comment, comments;
 
-    comment = function(name, email, content, callback) {
+    comment = function(slug, name, email, content, callback) {
       var data;
 
       data = {
         comment: {
+          slug: slug,
           name: name,
           email: email,
           body: content
@@ -21,12 +22,12 @@
         }
       });
     };
-    comments = function(callback) {
+    comments = function(slug, callback) {
       var term;
 
       term = this;
       return $.ajax({
-        url: 'http://feedmeplease.herokuapp.com/comments',
+        url: "http://feedmeplease.herokuapp.com/comments/" + slug,
         success: function(data) {
           var display, _i, _len, _results;
 
@@ -39,7 +40,7 @@
           _results = [];
           for (_i = 0, _len = data.length; _i < _len; _i++) {
             comment = data[_i];
-            _results.push(display(comment));
+            _results.push(display(comment.comment));
           }
           return _results;
         }

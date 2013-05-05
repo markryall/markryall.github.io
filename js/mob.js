@@ -86,15 +86,15 @@
       return _results;
     };
     comments = function() {
-      return feedme.comments(function(message) {
+      return feedme.comments(MD5(email), function(message) {
         return say(encode(message));
       });
     };
     comment = function() {
-      return ask('what is your name ? ', function(name) {
-        return ask('what is your email ? ', function(email) {
+      return ask('what is your name ? ', function(from_name) {
+        return ask('what is your email ? ', function(from_email) {
           return ask('what would you like to say ? ', function(content) {
-            return feedme.comment(name, email, content, function(message) {
+            return feedme.comment(MD5(email), from_name, from_email, content, function(message) {
               return say(message);
             });
           });
@@ -122,11 +122,11 @@
         },
         clear: clear,
         reload: reload,
-        comments: comments,
-        comment: comment,
         ssh: ssh
       };
       if (data) {
+        commands.comments = comments;
+        commands.comment = comment;
         commands.age = function() {
           return age(data.birth);
         };
