@@ -53,7 +53,7 @@ $ ->
   ran = (command) -> say "#{ps1.text()} #{command}"
   age = (birth) ->
     now = moment()
-    time = moment birth
+    time = moment birth * 1000
     display = (unit)-> say "#{now.diff(time, unit)} #{unit}"
     display unit for unit in "seconds minutes hours days weeks months years".split ' '
 

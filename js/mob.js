@@ -73,7 +73,7 @@
       var display, now, time, unit, _i, _len, _ref, _results;
 
       now = moment();
-      time = moment(birth);
+      time = moment(birth * 1000);
       display = function(unit) {
         return say("" + (now.diff(time, unit)) + " " + unit);
       };
