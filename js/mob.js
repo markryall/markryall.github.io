@@ -145,13 +145,14 @@
       }
     };
     commands_for(null);
-    load_deets = function(email) {
+    load_deets = function(new_email) {
       return $.ajax({
-        url: "https://deets.herokuapp.com/deets/" + (MD5(email)),
+        url: "https://deets.herokuapp.com/deets/" + (MD5(new_email)),
         headers: {
           'Accept': 'application/json'
         },
         success: function(data) {
+          email = new_email;
           ps1.text("~" + email + " > ");
           return commands_for(data);
         }

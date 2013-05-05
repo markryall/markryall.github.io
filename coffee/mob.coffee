@@ -90,12 +90,13 @@ $ ->
 
   commands_for null
 
-  load_deets = (email) ->
+  load_deets = (new_email) ->
     $.ajax
-      url: "https://deets.herokuapp.com/deets/#{MD5 email}",
+      url: "https://deets.herokuapp.com/deets/#{MD5 new_email}",
       headers:
         'Accept': 'application/json',
       success: (data) ->
+        email = new_email
         ps1.text "~#{email} > "
         commands_for data
 
