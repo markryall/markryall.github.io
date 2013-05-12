@@ -91,7 +91,7 @@ $ ->
   commands_for null
 
   load_deets = (new_email) ->
-    say "loading details for #{new_email}"
+    say "loading details for #{new_email} from <a href=\"https://deets.herokuapp.com\">deets.herokuapp.com</a>"
     $.ajax
       url: "https://deets.herokuapp.com/deets/#{MD5 new_email}",
       headers:
