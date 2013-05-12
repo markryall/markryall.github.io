@@ -146,6 +146,7 @@
     };
     commands_for(null);
     load_deets = function(new_email) {
+      say("loading details for " + new_email);
       return $.ajax({
         url: "https://deets.herokuapp.com/deets/" + (MD5(new_email)),
         headers: {
