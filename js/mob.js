@@ -86,8 +86,11 @@
       return _results;
     };
     comments = function() {
+      say("loading comments for " + email);
       return feedme.comments(MD5(email), function(message) {
         return say(encode(message));
+      }, function(comments) {
+        return say("found " + comments.length + " comments");
       });
     };
     comment = function() {

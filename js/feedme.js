@@ -22,7 +22,7 @@
         }
       });
     };
-    comments = function(slug, callback) {
+    comments = function(slug, message_callback, callback) {
       var term;
 
       term = this;
@@ -35,8 +35,9 @@
             var time;
 
             time = moment(comment.created_at);
-            return callback("" + (time.fromNow()) + ": " + comment.name + " said " + comment.body);
+            return message_callback("" + (time.fromNow()) + ": " + comment.name + " said " + comment.body);
           };
+          callback(data);
           _results = [];
           for (_i = 0, _len = data.length; _i < _len; _i++) {
             comment = data[_i];

@@ -58,7 +58,10 @@ $ ->
     display unit for unit in "seconds minutes hours days weeks months years".split ' '
 
   comments = ->
-    feedme.comments MD5(email), (message) -> say encode message
+    say "loading comments for #{email}"
+    feedme.comments MD5(email),
+      (message) -> say encode message
+      (comments) -> say "found #{comments.length} comments"
 
   comment = ->
     ask 'what is your name ? ', (from_name) ->
