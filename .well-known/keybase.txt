@@ -1,0 +1,66 @@
+==================================================================
+https://keybase.io/markryall
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://markryall.github.io
+  * I am markryall (https://keybase.io/markryall) on keybase.
+  * I have a public key with fingerprint 6319 D784 5B16 05AB F99A  E716 F2AC FEFE F621 8F13
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "6319d7845b1605abf99ae716f2acfefef6218f13",
+            "host": "keybase.io",
+            "key_id": "F2ACFEFEF6218F13",
+            "uid": "151a58063d1886c1ce48dd0942fe2200",
+            "username": "markryall"
+        },
+        "service": {
+            "hostname": "markryall.github.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1396759557,
+    "expire_in": 157680000,
+    "prev": "faff74f2528e2b848119d679c04df8325111b8f99cf9542b790c38accc5597af",
+    "seqno": 8,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG/MacGPG2 v2.0.22 (Darwin)
+
+owFdkVtIFFEYx3e3tKubFFaUiB3oRipzZnduS1fFLUWflAgql7mcWQd1ZpsdL8ti
+KKUVKRvVFkZolGxmZWSkiBlrJYb7YATSgz34IIhQEVuYmmlnrF4638PhfOf3/b/v
+/M+VpBUWmzX+aHFxZkdokzUWnRcsRYc/JgSBoEkB4AqCMrS8yYrqRbpPV1QDuADt
+gJzEsE5KgDRB8YLMcTxiIC2TvCgjHDQJWRk6QAYo1fxmBZYReD/KUjScwwePIuGs
+mzyS487FYfLuZb5y+QJSkKdYgnZIkGVpEYrIyUoSwTlJGZEkQZigH+kqX4EwXcHr
+ZXqALy8HtRkAp6sUEZlDm73/R7K8ilFaKfwZxKdrhiZq5RgoNQyf32UKGAGfWVGN
+BM9fLY+gqBI2AFdUId2vaCpwQUyKhmKKQwdHMxRHUUwGQDU+RUcexSQohmYJvMw+
+qApLyrwsM06ZpEgWkQLrZCG2kWY4kXBKMusgKQihwGIzRZmjnKTAcIToYHlRFCmK
+Y3gZmK87o2rAxeIxeS+W9CtelTcqdQRqL1lTV1qsNktigs38QsvaNcn/Pnbu7apF
++OBD6/lD+Upb+PZop1iM0na2jJ9tSmVy9uVZ2xbSZwca8kMjSzUL4PX69vp7n5rG
+vg4/6xvJPGjpSe3djH3bvXCBOFp9rL8r187NzEzYOz5HhvrqG4JFU8LsUNH+aHuz
+J+laX92XBuVFdujidXtXTJ1/Ojbofffk+c3m7Lpitf7OlL17sDG4rnc2bynzcfrE
+KOxJzPnWvytBSPwR81m5wpMt4XM3kuwlL5s1WyQQv/ym++f38K+6vRvcr+RT25sk
+uHH89IA+0pndfzUUmtNWJ2873loSJjsOFES3pDy8n577Pj4x2XirZS46PX0iZXJr
+JHK3IC0+DJmyPYXCbw==
+=5aMq
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/markryall
+
+==================================================================
+
+
